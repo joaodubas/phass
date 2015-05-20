@@ -4,6 +4,7 @@ import (
 	"fmt"
 	anthropo "github.com/joaodubas/phass/anthropometry"
 	assess "github.com/joaodubas/phass/assessment"
+	bf "github.com/joaodubas/phass/bodyfat"
 	skf "github.com/joaodubas/phass/skinfold"
 	"os"
 )
@@ -26,6 +27,9 @@ func main() {
 		skf.SKFSuprailiac:  35.0,
 	})
 	fmt.Println(skfs)
+
+	sskf := bf.NewSumSKF(p, bmiPrime.Anthropometry, skfs)
+	fmt.Println(sskf)
 }
 
 func handleError(tmpl string, err error) {
