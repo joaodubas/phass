@@ -8,6 +8,10 @@ import (
 	"math"
 )
 
+func init() {
+	skfEquations = append(skfEquations, registerSKF(menSevenSKF{}))
+}
+
 type womenSevenSKF struct {
 	*assess.Person
 	*anthropo.Anthropometry

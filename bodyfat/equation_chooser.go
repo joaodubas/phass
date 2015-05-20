@@ -46,10 +46,7 @@ func (s *SumSKF) chooser() BodyCompositionCalculator {
 	return bc
 }
 
-var skfEquations = []func(*assess.Person, *anthropo.Anthropometry, *skf.Skinfolds) BodyCompositionCalculator{
-	registerSKF(womenSevenSKF{}),
-	registerSKF(menSevenSKF{}),
-}
+var skfEquations = []func(*assess.Person, *anthropo.Anthropometry, *skf.Skinfolds) BodyCompositionCalculator{}
 
 func registerSKF(equation interface{}) func(*assess.Person, *anthropo.Anthropometry, *skf.Skinfolds) BodyCompositionCalculator {
 	return func(p *assess.Person, a *anthropo.Anthropometry, s *skf.Skinfolds) BodyCompositionCalculator {
