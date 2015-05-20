@@ -10,7 +10,7 @@ type BMIPrime struct {
 }
 
 func (b *BMIPrime) String() string {
-	return fmt.Sprintf("%s\nBMI prime: %.2f (%s)",  b.BMI.String(), b.Calc(), b.Classify())
+	return fmt.Sprintf("%s\nBMI prime: %.2f (%s)", b.BMI.String(), b.Calc(), b.Classify())
 }
 
 func (b *BMIPrime) Classify() string {
