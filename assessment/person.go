@@ -1,6 +1,9 @@
 package assessment
 
-import "time"
+import (
+	"fmt"
+	"time"
+)
 
 const (
 	Male int = iota
@@ -13,12 +16,24 @@ type Person struct {
 	Gender   int
 }
 
+func (p *Person) String() string {
+	return fmt.Sprintf("Name: %s\nGender: %s\nAge: %.0f", p.FullName, p.genderRepr(), p.Age())
+}
+
 func (p *Person) Age() float64 {
 	return elapsedFromNowIn(p.Birthday, secondsInYear)
 }
 
 func (p *Person) AgeInMonths() float64 {
 	return elapsedFromNowIn(p.Birthday, secondsInMonth)
+}
+
+func (p *Person) genderRepr() string {
+	choices := map[int]string{
+		Male:   "Male",
+		Female: "Female",
+	}
+	return choices[p.Gender]
 }
 
 func elapsedFromNowIn(t time.Time, in float64) float64 {
