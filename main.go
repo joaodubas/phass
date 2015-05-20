@@ -4,6 +4,7 @@ import (
 	"fmt"
 	anthropo "github.com/joaodubas/phass/anthropometry"
 	assess "github.com/joaodubas/phass/assessment"
+	skf "github.com/joaodubas/phass/skinfold"
 	"os"
 )
 
@@ -14,6 +15,17 @@ func main() {
 	p, err := assess.NewPerson("João Paulo Dubas", "1978-Dec-15", assess.Male)
 	handleError("Ops person was not born:", err)
 	fmt.Printf("Age in years: %.2f\nAge in months %.2f\n", p.Age(), p.AgeInMonths())
+
+	skfs := skf.NewSkinfolds(map[int]float64{
+		skf.SKFChest:       5.0,
+		skf.SKFAbdominal:   10.0,
+		skf.SKFThigh:       15.0,
+		skf.SKFTriceps:     20.0,
+		skf.SKFMidaxillary: 25.0,
+		skf.SKFSubscapular: 30.0,
+		skf.SKFSuprailiac:  35.0,
+	})
+	fmt.Println(skfs)
 }
 
 func handleError(tmpl string, err error) {
