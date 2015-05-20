@@ -35,7 +35,7 @@ func (s *SumSKF) CanUse() (bool, error) {
 }
 
 func (s *SumSKF) chooser() BodyCompositionCalculator {
-	var bc BodyCompositionCalculator
+	bc := &dummyCalculator{}
 	for _, fn := range skfEquations {
 		tbc := fn(s.Person, s.Anthropometry, s.Skinfolds)
 		if use, _ := tbc.CanUse(); !use {
@@ -53,4 +53,14 @@ func registerSKF(equation interface{}) func(*assess.Person, *anthropo.Anthropome
 		eq := equation.(SKFNewer)
 		return eq.New(p, a, s)
 	}
+}
+
+type dummyCalculator struct{}
+
+func (d *dummyCalculator) PercentBodyFat() (float64, error) {
+	return 0.0, fmt.Errorf("Choose struct that trully implement BodyCompositionCalculator interface.")
+}
+
+func (d *dummyCalculator) CanUse() (bool, error) {
+	return false, fmt.Errorf("Choose struct that trully implement BodyCompositionCalculator interface.")
 }
