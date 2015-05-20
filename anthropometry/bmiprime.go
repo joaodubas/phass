@@ -6,17 +6,11 @@ import (
 )
 
 type BMIPrime struct {
-	BMI
+	*BMI
 }
 
 func (b *BMIPrime) String() string {
-	return fmt.Sprintf(
-		"%s\n%s\nBMI prime: %.2f (%s)",
-		b.BMI.Anthropometry.String(),
-		b.BMI.String(),
-		b.Calc(),
-		b.Classify(),
-	)
+	return fmt.Sprintf("%s\nBMI prime: %.2f (%s)",  b.BMI.String(), b.Calc(), b.Classify())
 }
 
 func (b *BMIPrime) Classify() string {

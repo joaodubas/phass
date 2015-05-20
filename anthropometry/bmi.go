@@ -6,11 +6,11 @@ import (
 )
 
 type BMI struct {
-	Anthropometry
+	*Anthropometry
 }
 
 func (b *BMI) String() string {
-	return fmt.Sprintf("BMI: %.2f kg/m^2 (%s)", b.Calc(), b.Classify())
+	return fmt.Sprintf("%s\nBMI: %.2f kg/m^2 (%s)", b.Anthropometry.String(), b.Calc(), b.Classify())
 }
 
 func (b *BMI) Classify() string {
