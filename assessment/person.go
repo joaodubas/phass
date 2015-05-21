@@ -28,6 +28,14 @@ func (p *Person) AgeInMonths() float64 {
 	return elapsedFromNowIn(p.Birthday, secondsInMonth)
 }
 
+func (p *Person) AgeFromDate(t time.Time) float64 {
+	return elapsedFromDateIn(p.Birthday, t, secondsInYear)
+}
+
+func (p *Person) AgeInMonthsFromDate(t time.Time) float64 {
+	return elapsedFromDateIn(p.Birthday, t, secondsInMonth)
+}
+
 func (p *Person) genderRepr() string {
 	choices := map[int]string{
 		Male:   "Male",
@@ -37,7 +45,11 @@ func (p *Person) genderRepr() string {
 }
 
 func elapsedFromNowIn(t time.Time, in float64) float64 {
-	return time.Now().Sub(t).Seconds() / in
+	return elapsedFromDateIn(t, time.Now(), in)
+}
+
+func elapsedFromDateIn(from time.Time, to time.Time, in float64) float64 {
+	return to.Sub(from).Seconds() / in
 }
 
 var (
