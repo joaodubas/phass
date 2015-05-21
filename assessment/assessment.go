@@ -2,13 +2,15 @@ package assessment
 
 import "time"
 
+const TimeLayout = "2006-Jan-02"
+
 type Classifier interface {
 	Classify() string
 }
 
 func NewPerson(fullName string, birth string, gender int) (*Person, error) {
 	p := &Person{}
-	b, err := time.Parse("2006-Jan-02", birth)
+	b, err := time.Parse(TimeLayout, birth)
 	if err != nil {
 		return p, err
 	}
