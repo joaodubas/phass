@@ -9,52 +9,53 @@ type anthropo struct {
 	weight float64
 	height float64
 }
+
 type case_ struct {
-	bmi anthropo
-	calc float64
+	bmi      anthropo
+	calc     float64
 	classify string
 }
 
 func TestBMI(t *testing.T) {
 	cases := []case_{
 		case_{
-			bmi: anthropo{height: 189.2, weight: 51.1},
-			calc: 14.2751,
+			bmi:      anthropo{height: 189.2, weight: 51.1},
+			calc:     14.2751,
 			classify: BMIClassification[VerySeverelyUnderweight],
 		},
 		case_{
-			bmi: anthropo{height: 193.6, weight: 58.9},
-			calc: 15.7146,
+			bmi:      anthropo{height: 193.6, weight: 58.9},
+			calc:     15.7146,
 			classify: BMIClassification[SeverelyUnderweight],
 		},
 		case_{
-			bmi: anthropo{height: 171.5, weight: 54.2},
-			calc: 18.4277,
+			bmi:      anthropo{height: 171.5, weight: 54.2},
+			calc:     18.4277,
 			classify: BMIClassification[Underweight],
 		},
 		case_{
-			bmi: anthropo{height: 172.6, weight: 71.3},
-			calc: 23.9336,
+			bmi:      anthropo{height: 172.6, weight: 71.3},
+			calc:     23.9336,
 			classify: BMIClassification[Normal],
 		},
 		case_{
-			bmi: anthropo{height: 173.5, weight: 88.3},
-			calc: 29.3334,
+			bmi:      anthropo{height: 173.5, weight: 88.3},
+			calc:     29.3334,
 			classify: BMIClassification[Overweight],
 		},
 		case_{
-			bmi: anthropo{height: 164.3, weight: 83.8},
-			calc: 31.0434,
+			bmi:      anthropo{height: 164.3, weight: 83.8},
+			calc:     31.0434,
 			classify: BMIClassification[ObeseClassOne],
 		},
 		case_{
-			bmi: anthropo{height: 171.1, weight: 106.9},
-			calc: 36.5155,
+			bmi:      anthropo{height: 171.1, weight: 106.9},
+			calc:     36.5155,
 			classify: BMIClassification[ObeseClassTwo],
 		},
 		case_{
-			bmi: anthropo{height: 168.1, weight: 118.1},
-			calc: 41.7941,
+			bmi:      anthropo{height: 168.1, weight: 118.1},
+			calc:     41.7941,
 			classify: BMIClassification[ObeseClassThree],
 		},
 	}
@@ -73,43 +74,43 @@ func TestBMI(t *testing.T) {
 func TestBMIPrime(t *testing.T) {
 	cases := []case_{
 		case_{
-			bmi: anthropo{height: 189.2, weight: 51.1},
-			calc: 0.571,
+			bmi:      anthropo{height: 189.2, weight: 51.1},
+			calc:     0.571,
 			classify: BMIClassification[VerySeverelyUnderweight],
 		},
 		case_{
-			bmi: anthropo{height: 193.6, weight: 58.9},
-			calc: 0.6286,
+			bmi:      anthropo{height: 193.6, weight: 58.9},
+			calc:     0.6286,
 			classify: BMIClassification[SeverelyUnderweight],
 		},
 		case_{
-			bmi: anthropo{height: 171.5, weight: 54.2},
-			calc: 0.7371,
+			bmi:      anthropo{height: 171.5, weight: 54.2},
+			calc:     0.7371,
 			classify: BMIClassification[Underweight],
 		},
 		case_{
-			bmi: anthropo{height: 172.6, weight: 71.3},
-			calc: 0.9573,
+			bmi:      anthropo{height: 172.6, weight: 71.3},
+			calc:     0.9573,
 			classify: BMIClassification[Normal],
 		},
 		case_{
-			bmi: anthropo{height: 173.5, weight: 88.3},
-			calc: 1.1733,
+			bmi:      anthropo{height: 173.5, weight: 88.3},
+			calc:     1.1733,
 			classify: BMIClassification[Overweight],
 		},
 		case_{
-			bmi: anthropo{height: 164.3, weight: 83.8},
-			calc: 1.2417,
+			bmi:      anthropo{height: 164.3, weight: 83.8},
+			calc:     1.2417,
 			classify: BMIClassification[ObeseClassOne],
 		},
 		case_{
-			bmi: anthropo{height: 171.1, weight: 106.9},
-			calc: 1.4606,
+			bmi:      anthropo{height: 171.1, weight: 106.9},
+			calc:     1.4606,
 			classify: BMIClassification[ObeseClassTwo],
 		},
 		case_{
-			bmi: anthropo{height: 168.1, weight: 118.1},
-			calc: 1.6718,
+			bmi:      anthropo{height: 168.1, weight: 118.1},
+			calc:     1.6718,
 			classify: BMIClassification[ObeseClassThree],
 		},
 	}

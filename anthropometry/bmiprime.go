@@ -2,8 +2,8 @@ package anthropometry
 
 import (
 	"fmt"
-	"math"
 	"github.com/joaodubas/phass/common"
+	"math"
 )
 
 type BMIPrime struct {

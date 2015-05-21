@@ -21,4 +21,3 @@ var BMIClassification = map[int]string{
 	ObeseClassTwo:           "Obese class two",
 	ObeseClassThree:         "Obese class three",
 }
-
