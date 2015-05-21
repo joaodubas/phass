@@ -30,13 +30,13 @@ func TestPersonAge(t *testing.T) {
 
 	cases := []case_{
 		case_{
-			person: older,
-			age: 34.5,
+			person:      older,
+			age:         34.5,
 			ageInMonths: 414.0,
 		},
 		case_{
-			person: newer,
-			age: 25.27,
+			person:      newer,
+			age:         25.27,
 			ageInMonths: 303.24,
 		},
 	}
@@ -54,8 +54,8 @@ func TestPersonAge(t *testing.T) {
 var refDate, _ = time.Parse(TimeLayout, "2013-Jun-15")
 
 type case_ struct {
-	person *Person
-	age float64
+	person      *Person
+	age         float64
 	ageInMonths float64
 }
 
@@ -63,4 +63,3 @@ func floatEqual(data, expected, limit float64) bool {
 	d := math.Abs(data - expected)
 	return d < limit
 }
-
