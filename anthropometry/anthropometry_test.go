@@ -5,17 +5,6 @@ import (
 	"testing"
 )
 
-type anthropo struct {
-	weight float64
-	height float64
-}
-
-type case_ struct {
-	bmi      anthropo
-	calc     float64
-	classify string
-}
-
 func TestBMI(t *testing.T) {
 	cases := []case_{
 		case_{
@@ -124,6 +113,17 @@ func TestBMIPrime(t *testing.T) {
 			t.Errorf("Classification defined is %s and expected is %s\n", classify, data.classify)
 		}
 	}
+}
+
+type anthropo struct {
+	weight float64
+	height float64
+}
+
+type case_ struct {
+	bmi      anthropo
+	calc     float64
+	classify string
 }
 
 func floatEqual(data, expected, limit float64) bool {
