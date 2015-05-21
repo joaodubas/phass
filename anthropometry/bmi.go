@@ -3,6 +3,7 @@ package anthropometry
 import (
 	"fmt"
 	"math"
+	"github.com/joaodubas/phass/common"
 )
 
 type BMI struct {
@@ -24,7 +25,7 @@ func (b *BMI) Classify() string {
 		ObeseClassTwo:           []float64{35, 40},
 		ObeseClassThree:         []float64{40, math.Inf(+1)},
 	}
-	return classifier(b.Calc(), classes)
+	return common.Classifier(b.Calc(), classes, BMIClassification)
 }
 
 func (b *BMI) Calc() float64 {
