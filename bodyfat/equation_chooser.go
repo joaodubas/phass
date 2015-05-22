@@ -35,7 +35,7 @@ func (s *SumSKF) CanUse() (bool, error) {
 }
 
 func (s *SumSKF) chooser() BodyCompositionCalculator {
-	bc := &dummyCalculator{}
+	var bc BodyCompositionCalculator = &dummyCalculator{}
 	for _, fn := range skfEquations {
 		tbc := fn(s.Person, s.Anthropometry, s.Skinfolds)
 		if use, _ := tbc.CanUse(); !use {
