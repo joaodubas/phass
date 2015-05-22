@@ -13,6 +13,6 @@ func NewWaistToHipRatio(person *assess.Person, assessment *assess.Assessment, me
 	return &WaistToHip{person, assessment, NewCircumferences(measures)}
 }
 
-func NewConicityIndex(a *anthropo.Anthropometry, measures map[int]float64) *ConicityIndex {
-	return &ConicityIndex{a, NewCircumferences(measures)}
+func NewConicityIndex(anthropometry *anthropo.Anthropometry, measures map[int]float64) *ConicityIndex {
+	return &ConicityIndex{anthropometry, NewCircumferences(measures)}
 }
