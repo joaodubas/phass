@@ -19,3 +19,13 @@ func NewPerson(fullName string, birth string, gender int) (*Person, error) {
 	p.Gender = gender
 	return p, nil
 }
+
+func NewAssessment(date string) (*Assessment, error) {
+	a := &Assessment{}
+	d, err := time.Parse(TimeLayout, date)
+	if err != nil {
+		return a, err
+	}
+	a.Date = d
+	return a, nil
+}

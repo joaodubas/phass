@@ -44,6 +44,14 @@ func (p *Person) genderRepr() string {
 	return choices[p.Gender]
 }
 
+type Assessment struct {
+	Date time.Time
+}
+
+func (a *Assessment) String() string {
+	return fmt.Sprintf("Assessment made in %s", a.Date.Format(TimeLayout))
+}
+
 func elapsedFromNowIn(t time.Time, in float64) float64 {
 	return elapsedFromDateIn(t, time.Now(), in)
 }

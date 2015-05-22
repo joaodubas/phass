@@ -51,6 +51,17 @@ func TestPersonAge(t *testing.T) {
 	}
 }
 
+func TestAssessmentDate(t *testing.T) {
+	_, err := NewAssessment("1900-Dec-40")
+	if err == nil {
+		t.Errorf("Date used should be invalid")
+	}
+	_, err = NewAssessment("1900-Dec-18")
+	if err != nil {
+		t.Errorf("Everything is all right with this assessment")
+	}
+}
+
 var refDate, _ = time.Parse(TimeLayout, "2013-Jun-15")
 
 type case_ struct {
