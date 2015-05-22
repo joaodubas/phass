@@ -50,6 +50,16 @@ func (m *menSevenSKF) CanUse() (bool, error) {
 		return false, fmt.Errorf("Equation appropriate for ages between 18 up to 61.")
 	}
 
+	missing := []int{}
+	for _, skf := range menSevenSSKF {
+		if _, ok := m.Measures[skf]; !ok {
+			missing = append(missing, skf)
+		}
+	}
+	if len(missing) > 0 {
+		return false, fmt.Errorf("Equation must have %d skinfolds.", len(menSevenSSKF))
+	}
+
 	return true, nil
 }
 
