@@ -24,5 +24,5 @@ func (c *ConicityIndex) Calc() float64 {
 	if !ok {
 		return 0.0
 	}
-	return circ / 100 / (0.109 * math.Sqrt(c.Weight / c.Height / 100))
+	return circ / 100 / (0.109 * math.Sqrt(c.Weight/c.Height/100))
 }

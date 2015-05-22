@@ -51,7 +51,7 @@ func (w *WaistToHip) Calc() float64 {
 }
 
 var wthLimits = map[int]map[[2]float64]map[int][2]float64{
-	assess.Male: wthLimitsForMales,
+	assess.Male:   wthLimitsForMales,
 	assess.Female: wthLimitsForFemale,
 }
 
