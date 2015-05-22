@@ -9,8 +9,8 @@ func NewCircumferences(measures map[int]float64) *Circumferences {
 	return &Circumferences{Measures: measures}
 }
 
-func NewWaistToHipRation(p *assess.Person, measures map[int]float64) *WaistToHip {
-	return &WaistToHip{p, NewCircumferences(measures)}
+func NewWaistToHipRatio(person *assess.Person, assessment *assess.Assessment, measures map[int]float64) *WaistToHip {
+	return &WaistToHip{person, assessment, NewCircumferences(measures)}
 }
 
 func NewConicityIndex(a *anthropo.Anthropometry, measures map[int]float64) *ConicityIndex {

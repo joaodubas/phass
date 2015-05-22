@@ -9,6 +9,7 @@ import (
 
 type WaistToHip struct {
 	*assess.Person
+	*assess.Assessment
 	*Circumferences
 }
 
@@ -22,14 +23,14 @@ func (w *WaistToHip) Classify() string {
 		return "No classification due to missing measure"
 	}
 
-	genderClass, ok := wthLimits[w.Gender]
+	genderClass, ok := wthLimits[w.Person.Gender]
 	if !ok {
 		return fmt.Sprintf("No classification for gender %d", w.Gender)
 	}
 
-	age := w.Age()
+	age := w.Person.AgeFromDate(w.Assessment.Date)
 	for limits, classes := range genderClass {
-		if age < limits[0] || age > limits[1] {
+		if age < limits[0] || age >= limits[1] {
 			continue
 		}
 		return common.Classifier(w.Calc(), classes, WTHClassification)
