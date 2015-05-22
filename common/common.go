@@ -1,6 +1,6 @@
 package common
 
-func Classifier(value float64, classes map[int][]float64, mapper map[int]string) string {
+func Classifier(value float64, classes map[int][2]float64, mapper map[int]string) string {
 	cid := classifierId(value, classes)
 	class, ok := mapper[cid]
 	if !ok {
@@ -9,7 +9,7 @@ func Classifier(value float64, classes map[int][]float64, mapper map[int]string)
 	return class
 }
 
-func classifierId(value float64, classes map[int][]float64) int {
+func classifierId(value float64, classes map[int][2]float64) int {
 	cid := -1
 	for id_, limits := range classes {
 		if value >= limits[0] && value < limits[1] {
