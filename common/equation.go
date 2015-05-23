@@ -1,14 +1,14 @@
 package common
 
-func NewEquation(in map[string]float64, conf *EquationConf) Equationer {
+func NewEquation(in InParams, conf *EquationConf) Equationer {
 	return &Equation{in: in, conf: conf}
 }
 
-func NewEquationConf(name string, v []func(*Equation) (bool, error), eq func(*Equation) float64) *EquationConf {
+func NewEquationConf(name string, v []Validate, eq Calc) *EquationConf {
 	return &EquationConf{
 		Name:       name,
 		Validators: v,
-		Equation:   eq,
+		Calc:       eq,
 	}
 }
 
@@ -35,21 +35,27 @@ func (e *Equation) Validator() (bool, error) {
 	return true, nil
 }
 
-func (e *Equation) Equation() (float64, error) {
+func (e *Equation) Calc() (float64, error) {
 	if r, e := e.Validator(); !r {
 		return 0.0, e
 	}
-	return e.conf.Equation(e), nil
+	return e.conf.Calc(e), nil
 }
 
 type EquationConf struct {
 	Name       string
-	Validators []func(*Equation) (bool, error)
-	Equation   func(*Equation) float64
+	Validators []Validate
+	Calc       Calc
 }
+
+type InParams map[string]float64
+
+type Validate func(*Equation) (bool, error)
+
+type Calc func(*Equation) float64
 
 type Equationer interface {
 	In(string) (float64, bool)
 	Validator() (bool, error)
-	Equation() (float64, error)
+	Calc() (float64, error)
 }

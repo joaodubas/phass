@@ -23,7 +23,7 @@ func TestEquationValidation(t *testing.T) {
 			t.Error("Should get proper error message.")
 		}
 
-		if v, err := eq.Equation(); v > 0.0 {
+		if v, err := eq.Calc(); v > 0.0 {
 			t.Error("Value should be 0")
 		} else if !strings.Contains(err.Error(), data.errVal) {
 			t.Error("Should get proper error message.")
@@ -34,7 +34,7 @@ func TestEquationValidation(t *testing.T) {
 	if v, err := eq.Validator(); !v {
 		t.Error("Should be valid, instead get: %s", err)
 	}
-	if v, err := eq.Equation(); v <= 0.0 && err != nil {
+	if v, err := eq.Calc(); v <= 0.0 && err != nil {
 		t.Error("Should get value greater that 0, instead get error %s", err)
 	}
 
@@ -71,7 +71,7 @@ type case_ struct {
 
 var conf = NewEquationConf(
 	"Testing",
-	[]func(*Equation) (bool, error){
+	[]Validate{
 		func(e *Equation) (bool, error) {
 			keys := []string{"age", "sskf"}
 			for _, k := range keys {
