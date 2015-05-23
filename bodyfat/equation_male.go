@@ -1,67 +1,11 @@
 package bodyfat
 
 import (
-	"fmt"
-	anthropo "github.com/joaodubas/phass/anthropometry"
 	assess "github.com/joaodubas/phass/assessment"
+	"github.com/joaodubas/phass/common"
 	skf "github.com/joaodubas/phass/skinfold"
 	"math"
 )
-
-func init() {
-	skfEquations = append(skfEquations, registerSKF(menSevenSKF{}))
-}
-
-type menSevenSKF struct {
-	*assess.Person
-	*anthropo.Anthropometry
-	*skf.Skinfolds
-}
-
-func (m menSevenSKF) New(p *assess.Person, a *anthropo.Anthropometry, s *skf.Skinfolds) BodyCompositionCalculator {
-	return &menSevenSKF{p, a, s}
-}
-
-func (m *menSevenSKF) PercentBodyFat() (float64, error) {
-	db, err := m.density()
-	if err != nil {
-		return 0.0, err
-	}
-	return (4.95/db - 4.5) * 100.0, nil
-}
-
-func (m *menSevenSKF) density() (float64, error) {
-	if use, err := m.CanUse(); !use {
-		return 0.0, err
-	}
-
-	age := m.Age()
-	sskf := m.SumSpecific(menSevenSSKF)
-	return 1.112 - 0.00043499*sskf + 0.00000055*math.Pow(sskf, 2) - 0.0002882*age, nil
-}
-
-func (m *menSevenSKF) CanUse() (bool, error) {
-	if m.Gender != assess.Male {
-		return false, fmt.Errorf("Equation appropriate for mem.")
-	}
-
-	age := m.Age()
-	if age < 18 || age > 61 {
-		return false, fmt.Errorf("Equation appropriate for ages between 18 up to 61.")
-	}
-
-	missing := []int{}
-	for _, skf := range menSevenSSKF {
-		if _, ok := m.Measures[skf]; !ok {
-			missing = append(missing, skf)
-		}
-	}
-	if len(missing) > 0 {
-		return false, fmt.Errorf("Equation must have %d skinfolds.", len(menSevenSSKF))
-	}
-
-	return true, nil
-}
 
 var menSevenSSKF = []int{
 	skf.SKFChest,
@@ -72,3 +16,23 @@ var menSevenSSKF = []int{
 	skf.SKFTriceps,
 	skf.SKFMidaxillary,
 }
+
+var confMenSevenSKF = common.NewEquationConf(
+	"Seven skinfold equation from Pollock",
+	[]func(*common.Equation) (bool, error){
+		common.ValidateMeasures([]string{"gender", "age", "sskf"}),
+		common.ValidateGender(assess.Male),
+		common.ValidateAge(18, 61),
+	},
+	func(e *common.Equation) (float64, error) {
+		if ok, err := e.Validator(); !ok {
+			return 0.0, err
+		}
+
+		age, _ := e.In("age")
+		sskf, _ := e.In("sskf")
+		d := 1.112 - 0.00043499*sskf + 0.00000055*math.Pow(sskf, 2) - 0.0002882*age
+
+		return (4.95/d - 4.5) * 100.0, nil
+	},
+)
