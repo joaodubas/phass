@@ -19,7 +19,7 @@ var menSevenSSKF = []int{
 
 var confMenSevenSKF = common.NewEquationConf(
 	"Seven skinfold equation from Pollock",
-	[]common.Validate{
+	[]common.Validator{
 		common.ValidateMeasures([]string{"gender", "age", "sskf"}),
 		common.ValidateGender(assess.Male),
 		common.ValidateAge(18, 61),

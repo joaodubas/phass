@@ -40,7 +40,7 @@ func (b *BMI) equation() common.Equationer {
 		},
 		common.NewEquationConf(
 			"BMI",
-			[]common.Validate{
+			[]common.Validator{
 				common.ValidateMeasures([]string{"weight", "height"}),
 			},
 			func(e *common.Equation) float64 {

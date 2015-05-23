@@ -2,7 +2,7 @@ package common
 
 import "fmt"
 
-func ValidateGender(expect int) Validate {
+func ValidateGender(expect int) Validator {
 	return func(e *Equation) (bool, error) {
 		if g, ok := e.In("gender"); !ok {
 			return false, fmt.Errorf("Missing gender")
@@ -13,7 +13,7 @@ func ValidateGender(expect int) Validate {
 	}
 }
 
-func ValidateAge(lower, upper float64) Validate {
+func ValidateAge(lower, upper float64) Validator {
 	return func(e *Equation) (bool, error) {
 		if age, ok := e.In("age"); !ok {
 			return false, fmt.Errorf("Missing age measure")
@@ -24,7 +24,7 @@ func ValidateAge(lower, upper float64) Validate {
 	}
 }
 
-func ValidateMeasures(expect []string) Validate {
+func ValidateMeasures(expect []string) Validator {
 	return func(e *Equation) (bool, error) {
 		for _, k := range expect {
 			if _, ok := e.In(k); !ok {

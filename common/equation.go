@@ -4,7 +4,7 @@ func NewEquation(in InParams, conf *EquationConf) Equationer {
 	return &Equation{in: in, conf: conf}
 }
 
-func NewEquationConf(name string, v []Validate, eq Calc) *EquationConf {
+func NewEquationConf(name string, v []Validator, eq Calculator) *EquationConf {
 	return &EquationConf{
 		Name:       name,
 		Validators: v,
@@ -26,7 +26,7 @@ func (e *Equation) In(k string) (float64, bool) {
 	return v, ok
 }
 
-func (e *Equation) Validator() (bool, error) {
+func (e *Equation) Validate() (bool, error) {
 	for _, f := range e.conf.Validators {
 		if r, err := f(e); err != nil {
 			return r, err
@@ -36,7 +36,7 @@ func (e *Equation) Validator() (bool, error) {
 }
 
 func (e *Equation) Calc() (float64, error) {
-	if r, e := e.Validator(); !r {
+	if r, e := e.Validate(); !r {
 		return 0.0, e
 	}
 	return e.conf.Calc(e), nil
@@ -44,18 +44,18 @@ func (e *Equation) Calc() (float64, error) {
 
 type EquationConf struct {
 	Name       string
-	Validators []Validate
-	Calc       Calc
+	Validators []Validator
+	Calc       Calculator
 }
 
 type InParams map[string]float64
 
-type Validate func(*Equation) (bool, error)
+type Validator func(*Equation) (bool, error)
 
-type Calc func(*Equation) float64
+type Calculator func(*Equation) float64
 
 type Equationer interface {
 	In(string) (float64, bool)
-	Validator() (bool, error)
+	Validate() (bool, error)
 	Calc() (float64, error)
 }

@@ -17,7 +17,7 @@ func TestEquationValidation(t *testing.T) {
 
 	for _, data := range cases {
 		eq := NewEquation(data.in, conf)
-		if v, err := eq.Validator(); v != data.ok {
+		if v, err := eq.Validate(); v != data.ok {
 			t.Error("Should get an error.")
 		} else if !strings.Contains(err.Error(), data.err) {
 			t.Error("Should get proper error message.")
@@ -31,7 +31,7 @@ func TestEquationValidation(t *testing.T) {
 	}
 
 	eq := NewEquation(map[string]float64{"age": 20, "sskf": 109.2}, conf)
-	if v, err := eq.Validator(); !v {
+	if v, err := eq.Validate(); !v {
 		t.Error("Should be valid, instead get: %s", err)
 	}
 	if v, err := eq.Calc(); v <= 0.0 && err != nil {
@@ -66,18 +66,18 @@ func TestEquationRetrieveIn(t *testing.T) {
 func TestAgeValidator(t *testing.T) {
 	cases := []case_{
 		case_{
-			in: map[string]float64{},
-			ok: false,
+			in:  map[string]float64{},
+			ok:  false,
 			err: "Missing age",
 		},
 		case_{
-			in: map[string]float64{"age": 9},
-			ok: false,
+			in:  map[string]float64{"age": 9},
+			ok:  false,
 			err: "Valid for ages",
 		},
 		case_{
-			in: map[string]float64{"age": 21},
-			ok: false,
+			in:  map[string]float64{"age": 21},
+			ok:  false,
 			err: "Valid for ages",
 		},
 	}
@@ -114,14 +114,14 @@ func TestMeasureValidator(t *testing.T) {
 }
 
 type case_ struct {
-	in     InParams
-	ok bool
+	in  InParams
+	ok  bool
 	err string
 }
 
 var conf = NewEquationConf(
 	"Testing",
-	[]Validate{
+	[]Validator{
 		func(e *Equation) (bool, error) {
 			keys := []string{"age", "sskf"}
 			for _, k := range keys {
