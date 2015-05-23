@@ -33,24 +33,27 @@ func (b *BMI) Calc() (float64, error) {
 }
 
 func (b *BMI) equation() common.Equationer {
-	return common.NewEquation(
-		map[string]float64{
-			"weight": b.Weight,
-			"height": b.Height,
-		},
-		common.NewEquationConf(
-			"BMI",
-			[]common.Validator{
-				common.ValidateMeasures([]string{"weight", "height"}),
-			},
-			func(e *common.Equation) float64 {
-				w, _ := e.In("weight")
-				h, _ := e.In("height")
-				return w / math.Pow(h/100, 2)
-			},
-		),
-	)
+	return common.NewEquation(bmiConf.Extract(b), bmiConf)
 }
+
+var bmiConf = common.NewEquationConf(
+	"BMI",
+	func(i interface{}) common.InParams {
+		c := i.(*BMI)
+		return map[string]float64{
+			"weight": c.Weight,
+			"height": c.Height,
+		}
+	},
+	[]common.Validator{
+		common.ValidateMeasures([]string{"weight", "height"}),
+	},
+	func(e *common.Equation) float64 {
+		w, _ := e.In("weight")
+		h, _ := e.In("height")
+		return w / math.Pow(h/100, 2)
+	},
+)
 
 var limitsForBMI = map[int][2]float64{
 	VerySeverelyUnderweight: [2]float64{math.Inf(-1), 15},

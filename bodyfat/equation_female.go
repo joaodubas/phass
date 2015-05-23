@@ -19,6 +19,9 @@ var womenSevenSSKF = []int{
 
 var confWomenSevenSKF = common.NewEquationConf(
 	"Seven skinfold equation from Pollock",
+	func(i interface{}) common.InParams {
+		return map[string]float64{}
+	},
 	[]common.Validator{
 		common.ValidateMeasures([]string{"gender", "age", "sskf"}),
 		common.ValidateGender(assess.Female),
