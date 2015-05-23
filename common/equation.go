@@ -4,9 +4,10 @@ func NewEquation(in InParams, conf *EquationConf) Equationer {
 	return &Equation{in: in, conf: conf}
 }
 
-func NewEquationConf(name string, v []Validator, eq Calculator) *EquationConf {
+func NewEquationConf(name string, e Extractor, v []Validator, eq Calculator) *EquationConf {
 	return &EquationConf{
 		Name:       name,
+		Extract:    e,
 		Validators: v,
 		Calc:       eq,
 	}
@@ -44,15 +45,17 @@ func (e *Equation) Calc() (float64, error) {
 
 type EquationConf struct {
 	Name       string
+	Extract    Extractor
 	Validators []Validator
 	Calc       Calculator
 }
 
-type InParams map[string]float64
-
-type Validator func(*Equation) (bool, error)
-
-type Calculator func(*Equation) float64
+type(
+	InParams   map[string]float64
+	Extractor  func(interface{}) InParams
+	Validator  func(*Equation) (bool, error)
+	Calculator func(*Equation) float64
+)
 
 type Equationer interface {
 	In(string) (float64, bool)

@@ -121,6 +121,9 @@ type case_ struct {
 
 var conf = NewEquationConf(
 	"Testing",
+	func(i interface{}) InParams {
+		return map[string]float64{}
+	},
 	[]Validator{
 		func(e *Equation) (bool, error) {
 			keys := []string{"age", "sskf"}
