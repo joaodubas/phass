@@ -4,8 +4,10 @@ import "time"
 
 const TimeLayout = "2006-Jan-02"
 
-type Classifier interface {
-	Classify() string
+type Measurer interface {
+	Result() ([]string, error)
+	Classify() (string, error)
+	Calc() (float64, error)
 }
 
 func NewPerson(fullName string, birth string, gender int) (*Person, error) {
