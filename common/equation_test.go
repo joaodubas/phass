@@ -16,7 +16,7 @@ func TestEquationValidation(t *testing.T) {
 	}
 
 	for _, data := range cases {
-		eq := makeEquation(data.in)
+		eq := NewEquation(data.in, conf)
 		if v, err := eq.Validator(); v != data.rsVal {
 			t.Error("Should get an error.")
 		} else if !strings.Contains(err.Error(), data.errVal) {
@@ -30,7 +30,7 @@ func TestEquationValidation(t *testing.T) {
 		}
 	}
 
-	eq := makeEquation(map[string]float64{"age": 20, "sskf": 109.2})
+	eq := NewEquation(map[string]float64{"age": 20, "sskf": 109.2}, conf)
 	if v, err := eq.Validator(); !v {
 		t.Error("Should be valid, instead get: %s", err)
 	}
@@ -45,7 +45,7 @@ func TestEquationRetrieveIn(t *testing.T) {
 		"age":  18.8,
 		"sskf": 210.1,
 	}
-	eq := makeEquation(in)
+	eq := NewEquation(in, conf)
 
 	for k, v := range in {
 		sv, ok := eq.In(k)
@@ -69,39 +69,36 @@ type case_ struct {
 	errVal string
 }
 
-func makeEquation(in map[string]float64) Equationer {
-	return NewEquation(
-		"Testing",
-		in,
-		[]func(e *Equation) (bool, error){
-			func(e *Equation) (bool, error) {
-				keys := []string{"age", "sskf"}
-				for _, k := range keys {
-					if _, ok := e.In(k); !ok {
-						return false, fmt.Errorf("Missing measure %s", k)
-					}
+var conf = NewEquationConf(
+	"Testing",
+	[]func(*Equation) (bool, error){
+		func(e *Equation) (bool, error) {
+			keys := []string{"age", "sskf"}
+			for _, k := range keys {
+				if _, ok := e.In(k); !ok {
+					return false, fmt.Errorf("Missing measure %s", k)
 				}
-				return true, nil
-			},
-			func(e *Equation) (bool, error) {
-				v, ok := e.In("age")
-				if !ok {
-					return false, fmt.Errorf("Missing measure age.")
-				}
-
-				lower, upper := 18.0, 64.0
-				if v < lower || v >= upper {
-					return false, fmt.Errorf("Equation valid for age %.0f up to %.0f", lower, upper)
-				}
-
-				return true, nil
-			},
+			}
+			return true, nil
 		},
-		func(e *Equation) float64 {
-			age, _ := e.In("age")
-			sskf, _ := e.In("sskf")
-			d := 1.09 - 0.0002*sskf + 0.0000001*math.Pow(sskf, 2) - 0.00005*age
-			return 495.0/d - 450.0
+		func(e *Equation) (bool, error) {
+			v, ok := e.In("age")
+			if !ok {
+				return false, fmt.Errorf("Missing measure age.")
+			}
+
+			lower, upper := 18.0, 64.0
+			if v < lower || v >= upper {
+				return false, fmt.Errorf("Equation valid for age %.0f up to %.0f", lower, upper)
+			}
+
+			return true, nil
 		},
-	)
-}
+	},
+	func(e *Equation) float64 {
+		age, _ := e.In("age")
+		sskf, _ := e.In("sskf")
+		d := 1.09 - 0.0002*sskf + 0.0000001*math.Pow(sskf, 2) - 0.00005*age
+		return 495.0/d - 450.0
+	},
+)
