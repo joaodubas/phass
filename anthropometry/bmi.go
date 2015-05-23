@@ -11,15 +11,45 @@ type BMI struct {
 }
 
 func (b *BMI) String() string {
-	return fmt.Sprintf("%s\nBMI: %.2f kg/m^2 (%s)", b.Anthropometry.String(), b.Calc(), b.Classify())
+	v, _ := b.Calc()
+	c, _ := b.Classify()
+	return fmt.Sprintf("%s\nBMI: %.2f kg/m^2 (%s)", b.Anthropometry.String(), v, c)
 }
 
-func (b *BMI) Classify() string {
-	return common.Classifier(b.Calc(), limitsForBMI, BMIClassification)
+func (b *BMI) Result() ([]string, error) {
+	return []string{}, nil
 }
 
-func (b *BMI) Calc() float64 {
-	return b.Weight / math.Pow(b.Height/100, 2)
+func (b *BMI) Classify() (string, error) {
+	v, err := b.Calc()
+	if err != nil {
+		return "", err
+	}
+	return common.Classifier(v, limitsForBMI, BMIClassification), nil
+}
+
+func (b *BMI) Calc() (float64, error) {
+	return b.equation().Calc()
+}
+
+func (b *BMI) equation() common.Equationer {
+	return common.NewEquation(
+		map[string]float64{
+			"weight": b.Weight,
+			"height": b.Height,
+		},
+		common.NewEquationConf(
+			"BMI",
+			[]common.Validate{
+				common.ValidateMeasures([]string{"weight", "height"}),
+			},
+			func(e *common.Equation) float64 {
+				w, _ := e.In("weight")
+				h, _ := e.In("height")
+				return w / math.Pow(h/100, 2)
+			},
+		),
+	)
 }
 
 var limitsForBMI = map[int][2]float64{

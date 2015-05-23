@@ -51,10 +51,10 @@ func TestBMI(t *testing.T) {
 
 	for _, data := range cases {
 		bmi := NewBMI(data.bmi.weight, data.bmi.height)
-		if calc := bmi.Calc(); !floatEqual(calc, data.calc, FloatLimit) {
+		if calc, _ := bmi.Calc(); !floatEqual(calc, data.calc, FloatLimit) {
 			t.Errorf("BMI calculated is %.4f and expected is %.4f\n", calc, data.calc)
 		}
-		if classify := bmi.Classify(); classify != data.classify {
+		if classify, _ := bmi.Classify(); classify != data.classify {
 			t.Errorf("Classification defined is %s and expected is %s\n", classify, data.classify)
 		}
 	}
@@ -106,10 +106,10 @@ func TestBMIPrime(t *testing.T) {
 
 	for _, data := range cases {
 		bmi := NewBMIPrime(data.bmi.weight, data.bmi.height)
-		if calc := bmi.Calc(); !floatEqual(calc, data.calc, FloatLimit) {
+		if calc, _ := bmi.Calc(); !floatEqual(calc, data.calc, FloatLimit) {
 			t.Errorf("BMI calculated is %.4f and expected is %.4f\n", calc, data.calc)
 		}
-		if classify := bmi.Classify(); classify != data.classify {
+		if classify, _ := bmi.Classify(); classify != data.classify {
 			t.Errorf("Classification defined is %s and expected is %s\n", classify, data.classify)
 		}
 	}

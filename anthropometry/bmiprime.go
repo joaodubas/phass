@@ -11,15 +11,29 @@ type BMIPrime struct {
 }
 
 func (b *BMIPrime) String() string {
-	return fmt.Sprintf("%s\nBMI prime: %.2f (%s)", b.BMI.String(), b.Calc(), b.Classify())
+	v, _ := b.Calc()
+	c, _ := b.Classify()
+	return fmt.Sprintf("%s\nBMI prime: %.2f (%s)", b.BMI.String(), v, c)
 }
 
-func (b *BMIPrime) Classify() string {
-	return common.Classifier(b.Calc(), limitsForBMIPrime, BMIClassification)
+func (b *BMIPrime) Result() ([]string, error) {
+	return []string{}, nil
 }
 
-func (b *BMIPrime) Calc() float64 {
-	return b.BMI.Calc() / 25.0
+func (b *BMIPrime) Classify() (string, error) {
+	v, err := b.Calc()
+	if err != nil {
+		return "", err
+	}
+	return common.Classifier(v, limitsForBMIPrime, BMIClassification), nil
+}
+
+func (b *BMIPrime) Calc() (float64, error) {
+	v, err := b.BMI.Calc()
+	if err != nil {
+		return 0.0, err
+	}
+	return v / 25.0, nil
 }
 
 var limitsForBMIPrime = map[int][2]float64{
