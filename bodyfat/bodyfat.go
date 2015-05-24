@@ -7,6 +7,15 @@ import (
 	skf "github.com/joaodubas/phass/skinfold"
 )
 
+type bodyCompBySKF func(*assess.Person, *assess.Assessment, *skf.Skinfolds) *BodyCompositionSKF
+
+func FactoryBodyCompositionSKF(conf SKFEquationConf) bodyCompBySKF {
+	c := NewEquationConfForSKF(conf)
+	return func(p *assess.Person, a *assess.Assessment, s *skf.Skinfolds) *BodyCompositionSKF {
+		return NewBodyCompositionSKF(p, a, s, c)
+	}
+}
+
 type BodyCompositionSKF struct {
 	*assess.Person
 	*assess.Assessment
