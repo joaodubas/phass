@@ -28,7 +28,8 @@ func NewBodyCompositionSKF(p *assess.Person, a *assess.Assessment, s *skf.Skinfo
 }
 
 func (b *BodyCompositionSKF) String() string {
-	return ""
+	v, _ := b.Calc()
+	return fmt.Sprintf("Body fat: %.2f %%", v)
 }
 
 func (b *BodyCompositionSKF) Result() ([]string, error) {
