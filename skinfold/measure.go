@@ -37,3 +37,19 @@ func (s *Skinfolds) SumSpecific(skinfolds []int) float64 {
 	}
 	return accum
 }
+
+func NamedSkinfold(name int) string {
+	named := map[int]string{
+		SKFSubscapular: "subscapular",
+		SKFTriceps:     "triceps",
+		SKFBiceps:      "biceps",
+		SKFChest:       "chest",
+		SKFMidaxillary: "mid-axillary",
+		SKFSuprailiac:  "suprailiac",
+		SKFAbdominal:   "abdominal",
+		SKFThigh:       "thigh",
+		SKFCalf:        "calf",
+	}
+
+	return named[name]
+}
