@@ -7,16 +7,22 @@ import (
 	"math"
 )
 
-func NewMenSevenSKF(p *assess.Person, a *assess.Assessment, s *skf.Skinfolds) *BodyCompositionSKF {
-	return NewBodyCompositionSKF(p, a, s, confMenSevenSKF)
-}
+var NewMenSevenSKF = FactoryBodyCompositionSKF(confMenSevenSKF)
 
-var confMenSevenSKF = NewEquationConfForSKF(SKFEquationConf{
-	name:      "Seven skinfold equation from Pollock",
-	gender:    assess.Male,
-	lowerAge:  18,
-	upperAge:  61,
-	skinfolds: menSevenSSKF,
+var confMenSevenSKF = SKFEquationConf{
+	name:     "Seven skinfold equation from Pollock",
+	gender:   assess.Male,
+	lowerAge: 18,
+	upperAge: 61,
+	skinfolds: []int{
+		skf.SKFChest,
+		skf.SKFAbdominal,
+		skf.SKFThigh,
+		skf.SKFAbdominal,
+		skf.SKFSuprailiac,
+		skf.SKFTriceps,
+		skf.SKFMidaxillary,
+	},
 	equation: func(e *common.Equation) float64 {
 		age, _ := e.In("age")
 		sskf, _ := e.In("sskf")
@@ -24,14 +30,4 @@ var confMenSevenSKF = NewEquationConfForSKF(SKFEquationConf{
 
 		return (4.95/d - 4.5) * 100.0
 	},
-})
-
-var menSevenSSKF = []int{
-	skf.SKFChest,
-	skf.SKFAbdominal,
-	skf.SKFThigh,
-	skf.SKFAbdominal,
-	skf.SKFSuprailiac,
-	skf.SKFTriceps,
-	skf.SKFMidaxillary,
 }
