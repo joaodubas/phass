@@ -50,7 +50,7 @@ type EquationConf struct {
 	Calc       Calculator
 }
 
-type(
+type (
 	InParams   map[string]float64
 	Extractor  func(interface{}) InParams
 	Validator  func(*Equation) (bool, error)
