@@ -30,7 +30,7 @@ func TestBodyFatCompositionValidation(t *testing.T) {
 		newCase_(
 			female,
 			"1988-Mar-15",
-			map[int]float64{skf.SKFTriceps: 10.5, skf.SKFSuprailiac: 42.1, skf.SKFThigh: 21.2},
+			map[int]float64{skf.SKFTriceps: 10.5, skf.SKFSuprailiac: 26.9, skf.SKFThigh: 21.2},
 			"Too young",
 			0.0,
 			"Valid for age",
@@ -38,7 +38,7 @@ func TestBodyFatCompositionValidation(t *testing.T) {
 		newCase_(
 			female,
 			"2048-Mar-15",
-			map[int]float64{skf.SKFTriceps: 10.5, skf.SKFSuprailiac: 42.1, skf.SKFThigh: 21.2},
+			map[int]float64{skf.SKFTriceps: 10.5, skf.SKFSuprailiac: 26.9, skf.SKFThigh: 21.2},
 			"Too old",
 			0.0,
 			"Valid for age",
@@ -46,7 +46,7 @@ func TestBodyFatCompositionValidation(t *testing.T) {
 		newCase_(
 			male,
 			"1998-Dec-15",
-			map[int]float64{skf.SKFTriceps: 10.5, skf.SKFSuprailiac: 42.1, skf.SKFThigh: 21.2},
+			map[int]float64{skf.SKFTriceps: 10.5, skf.SKFSuprailiac: 26.9, skf.SKFThigh: 21.2},
 			"Wrong gender",
 			0.0,
 			"Valid for gender",
@@ -62,9 +62,9 @@ func TestBodyFatCompositionValidation(t *testing.T) {
 		newCase_(
 			female,
 			"2008-Mar-15",
-			map[int]float64{skf.SKFTriceps: 10.5, skf.SKFSuprailiac: 42.1, skf.SKFThigh: 21.2},
-			"Every little thing is gone be allright",
-			42.41,
+			map[int]float64{skf.SKFTriceps: 10.5, skf.SKFSuprailiac: 26.9, skf.SKFThigh: 21.2},
+			"The answer to life the universe and everything",
+			42.00,
 			"",
 		),
 	}
@@ -108,6 +108,6 @@ var (
 )
 
 func floatEqual(original, expected, limit float64) bool {
-	diff := math.Abs(original-expected)
+	diff := math.Abs(original - expected)
 	return diff <= limit
 }
