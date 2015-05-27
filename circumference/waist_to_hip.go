@@ -40,11 +40,11 @@ func (w *WaistToHip) Classify() string {
 }
 
 func (w *WaistToHip) Calc() float64 {
-	waist, ok := w.Measures[CCFWaist]
+	waist, ok := w.Circumferences.Measures[CCFWaist]
 	if !ok {
 		return 0.0
 	}
-	hip, ok := w.Measures[CCFHip]
+	hip, ok := w.Circumferences.Measures[CCFHip]
 	if !ok {
 		return 0.0
 	}
