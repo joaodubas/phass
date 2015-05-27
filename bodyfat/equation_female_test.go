@@ -77,3 +77,38 @@ func TestFemaleThreeSkinfoldEquation(t *testing.T) {
 		}
 	}
 }
+
+func TestFemaleTwoSkinfoldEquation(t *testing.T) {
+	cases := []case_{
+		newCase_(female, "2004-Mar-15", map[int]float64{skf.SKFSubscapular: 28, skf.SKFTriceps: 13.1, skf.SKFChest: 7.5, skf.SKFMidaxillary: 7.5, skf.SKFSuprailiac: 30, skf.SKFAbdominal: 18.5, skf.SKFThigh: 31.1, skf.SKFCalf: 14.5}, "for-age-16", 21.286, ""),
+		newCase_(female, "2004-Mar-15", map[int]float64{skf.SKFSubscapular: 18.5, skf.SKFTriceps: 9.8, skf.SKFChest: 9.6, skf.SKFMidaxillary: 7.7, skf.SKFSuprailiac: 21.1, skf.SKFAbdominal: 34.1, skf.SKFThigh: 20.8, skf.SKFCalf: 20.6}, "for-age-16", 23.344, ""),
+		newCase_(female, "1995-Mar-15", map[int]float64{skf.SKFSubscapular: 27.2, skf.SKFTriceps: 16.1, skf.SKFChest: 11.9, skf.SKFMidaxillary: 6.8, skf.SKFSuprailiac: 36.5, skf.SKFAbdominal: 45.4, skf.SKFThigh: 34.6, skf.SKFCalf: 10.4}, "for-age-7", 20.478, ""),
+		newCase_(female, "2001-Mar-15", map[int]float64{skf.SKFSubscapular: 21.7, skf.SKFTriceps: 12.3, skf.SKFChest: 12.8, skf.SKFMidaxillary: 11.9, skf.SKFSuprailiac: 36.9, skf.SKFAbdominal: 32.7, skf.SKFThigh: 27.9, skf.SKFCalf: 17.4}, "for-age-13", 22.83, ""),
+		newCase_(female, "1995-Mar-15", map[int]float64{skf.SKFSubscapular: 32.5, skf.SKFTriceps: 13.9, skf.SKFChest: 8.2, skf.SKFMidaxillary: 8.5, skf.SKFSuprailiac: 30.8, skf.SKFAbdominal: 25.1, skf.SKFThigh: 13.7, skf.SKFCalf: 20.1}, "for-age-7", 25.99, ""),
+		newCase_(female, "2003-Mar-15", map[int]float64{skf.SKFSubscapular: 21.3, skf.SKFTriceps: 11.5, skf.SKFChest: 8.2, skf.SKFMidaxillary: 12.8, skf.SKFSuprailiac: 31.9, skf.SKFAbdominal: 20.1, skf.SKFThigh: 31.2, skf.SKFCalf: 16.8}, "for-age-15", 21.801, ""),
+		newCase_(female, "1995-Mar-15", map[int]float64{skf.SKFSubscapular: 35.4, skf.SKFTriceps: 13.7, skf.SKFChest: 6.5, skf.SKFMidaxillary: 11.4, skf.SKFSuprailiac: 38.6, skf.SKFAbdominal: 29.3, skf.SKFThigh: 27.6, skf.SKFCalf: 20.7}, "for-age-7", 26.284, ""),
+		newCase_(female, "2004-Mar-15", map[int]float64{skf.SKFSubscapular: 30.5, skf.SKFTriceps: 10.1, skf.SKFChest: 6.2, skf.SKFMidaxillary: 11.1, skf.SKFSuprailiac: 42, skf.SKFAbdominal: 26.3, skf.SKFThigh: 26.4, skf.SKFCalf: 16.7}, "for-age-16", 20.698, ""),
+		newCase_(female, "2000-Mar-15", map[int]float64{skf.SKFSubscapular: 29.7, skf.SKFTriceps: 9.3, skf.SKFChest: 9.7, skf.SKFMidaxillary: 12.6, skf.SKFSuprailiac: 36.7, skf.SKFAbdominal: 17.5, skf.SKFThigh: 28.4, skf.SKFCalf: 9.6}, "for-age-12", 14.892, ""),
+		newCase_(female, "2003-Mar-15", map[int]float64{skf.SKFSubscapular: 29.7, skf.SKFTriceps: 12.8, skf.SKFChest: 8.2, skf.SKFMidaxillary: 16.4, skf.SKFSuprailiac: 24.5, skf.SKFAbdominal: 26.7, skf.SKFThigh: 30.1, skf.SKFCalf: 25.6}, "for-age-15", 29.224, ""),
+		newCase_(female, "1999-Mar-15", map[int]float64{skf.SKFSubscapular: 16.1, skf.SKFTriceps: 16.1, skf.SKFChest: 11.6, skf.SKFMidaxillary: 11.8, skf.SKFSuprailiac: 42.6, skf.SKFAbdominal: 32.2, skf.SKFThigh: 14.1, skf.SKFCalf: 14.9}, "for-age-11", 23.785, ""),
+		newCase_(female, "2002-Mar-15", map[int]float64{skf.SKFSubscapular: 24.1, skf.SKFTriceps: 11.4, skf.SKFChest: 6.3, skf.SKFMidaxillary: 6.7, skf.SKFSuprailiac: 38.9, skf.SKFAbdominal: 18, skf.SKFThigh: 34.6, skf.SKFCalf: 18.4}, "for-age-14", 22.903, ""),
+		newCase_(female, "1995-Mar-15", map[int]float64{skf.SKFSubscapular: 34.5, skf.SKFTriceps: 16.1, skf.SKFChest: 8.7, skf.SKFMidaxillary: 11.6, skf.SKFSuprailiac: 45.3, skf.SKFAbdominal: 15.3, skf.SKFThigh: 27.5, skf.SKFCalf: 19.1}, "for-age-7", 26.872, ""),
+		newCase_(female, "2001-Mar-15", map[int]float64{skf.SKFSubscapular: 28.1, skf.SKFTriceps: 14.9, skf.SKFChest: 12.6, skf.SKFMidaxillary: 11.1, skf.SKFSuprailiac: 18.5, skf.SKFAbdominal: 44.1, skf.SKFThigh: 26.4, skf.SKFCalf: 21.4}, "for-age-13", 27.681, ""),
+		newCase_(female, "2002-Mar-15", map[int]float64{skf.SKFSubscapular: 23.1, skf.SKFTriceps: 8.8, skf.SKFChest: 11, skf.SKFMidaxillary: 13.6, skf.SKFSuprailiac: 20, skf.SKFAbdominal: 32.9, skf.SKFThigh: 20.9, skf.SKFCalf: 8.2}, "for-age-14", 13.495, ""),
+		newCase_(female, "2005-Mar-15", map[int]float64{skf.SKFSubscapular: 18.9, skf.SKFTriceps: 15.8, skf.SKFChest: 12.7, skf.SKFMidaxillary: 11.4, skf.SKFSuprailiac: 25.3, skf.SKFAbdominal: 29, skf.SKFThigh: 20.2, skf.SKFCalf: 16.8}, "for-age-17", 24.961, ""),
+		newCase_(female, "1999-Mar-15", map[int]float64{skf.SKFSubscapular: 20.9, skf.SKFTriceps: 8, skf.SKFChest: 6.5, skf.SKFMidaxillary: 8.4, skf.SKFSuprailiac: 45.4, skf.SKFAbdominal: 15.6, skf.SKFThigh: 33.5, skf.SKFCalf: 23.1}, "for-age-11", 23.859, ""),
+		newCase_(female, "1995-Mar-15", map[int]float64{skf.SKFSubscapular: 30.8, skf.SKFTriceps: 14.6, skf.SKFChest: 7.2, skf.SKFMidaxillary: 15, skf.SKFSuprailiac: 22.8, skf.SKFAbdominal: 43.2, skf.SKFThigh: 22.5, skf.SKFCalf: 8.4}, "for-age-7", 17.905, ""),
+		newCase_(female, "1999-Mar-15", map[int]float64{skf.SKFSubscapular: 27.4, skf.SKFTriceps: 8.1, skf.SKFChest: 7.8, skf.SKFMidaxillary: 9.1, skf.SKFSuprailiac: 44.1, skf.SKFAbdominal: 24.7, skf.SKFThigh: 34.1, skf.SKFCalf: 23.9}, "for-age-11", 24.52, ""),
+		newCase_(female, "1998-Mar-15", map[int]float64{skf.SKFSubscapular: 27.5, skf.SKFTriceps: 16.5, skf.SKFChest: 7.8, skf.SKFMidaxillary: 14.4, skf.SKFSuprailiac: 33.9, skf.SKFAbdominal: 38.2, skf.SKFThigh: 16.5, skf.SKFCalf: 19.9}, "for-age-10", 27.754, ""),
+	}
+
+	for _, data := range cases {
+		bc := NewWomenTwoSKF(data.person, data.assessment, data.skinfold)
+		if calc, err := bc.Calc(); err != nil {
+			t.Logf("Got age %f", data.person.AgeFromDate(data.assessment.Date))
+			t.Errorf("Case _%s_ failed, should not show a validation error, instead got %s", data.name, err)
+		} else if !floatEqual(calc, data.calc, 0.009) {
+			t.Errorf("Case _%s_ failed, should have value %.4f, instead got %.4f", data.name, data.calc, calc)
+		}
+	}
+}

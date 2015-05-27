@@ -72,3 +72,37 @@ func TestMaleThreeSkinfoldEquation(t *testing.T) {
 		}
 	}
 }
+
+func TestMaleTwoSkinfoldEquation(t *testing.T) {
+	cases := []case_{
+		newCase_(male, "1994-Dec-15", map[int]float64{skf.SKFSubscapular: 17.6, skf.SKFTriceps: 8.5, skf.SKFChest: 9.8, skf.SKFMidaxillary: 10.6, skf.SKFSuprailiac: 40.3, skf.SKFAbdominal: 28.4, skf.SKFThigh: 34.6, skf.SKFCalf: 18.4}, "for-age-16", 21.509, ""),
+		newCase_(male, "1984-Dec-15", map[int]float64{skf.SKFSubscapular: 26.6, skf.SKFTriceps: 12, skf.SKFChest: 9.7, skf.SKFMidaxillary: 16.7, skf.SKFSuprailiac: 43.9, skf.SKFAbdominal: 42.8, skf.SKFThigh: 10.3, skf.SKFCalf: 24.1}, "for-age-6", 27.121, ""),
+		newCase_(male, "1994-Dec-15", map[int]float64{skf.SKFSubscapular: 19.7, skf.SKFTriceps: 16.1, skf.SKFChest: 8.8, skf.SKFMidaxillary: 15.2, skf.SKFSuprailiac: 17, skf.SKFAbdominal: 35.3, skf.SKFThigh: 28.7, skf.SKFCalf: 24.4}, "for-age-16", 29.805, ""),
+		newCase_(male, "1989-Dec-15", map[int]float64{skf.SKFSubscapular: 20.5, skf.SKFTriceps: 10.3, skf.SKFChest: 11.2, skf.SKFMidaxillary: 16.3, skf.SKFSuprailiac: 25, skf.SKFAbdominal: 39.4, skf.SKFThigh: 11.9, skf.SKFCalf: 23.7}, "for-age-11", 25.84, ""),
+		newCase_(male, "1989-Dec-15", map[int]float64{skf.SKFSubscapular: 21.2, skf.SKFTriceps: 11.3, skf.SKFChest: 10.8, skf.SKFMidaxillary: 18.7, skf.SKFSuprailiac: 27.4, skf.SKFAbdominal: 18.1, skf.SKFThigh: 25.8, skf.SKFCalf: 22.8}, "for-age-11", 25.901, ""),
+		newCase_(male, "1985-Dec-15", map[int]float64{skf.SKFSubscapular: 31.7, skf.SKFTriceps: 9.4, skf.SKFChest: 12.3, skf.SKFMidaxillary: 10.4, skf.SKFSuprailiac: 19.9, skf.SKFAbdominal: 38.2, skf.SKFThigh: 26.9, skf.SKFCalf: 19.9}, "for-age-7", 22.973, ""),
+		newCase_(male, "1990-Dec-15", map[int]float64{skf.SKFSubscapular: 18.9, skf.SKFTriceps: 15.9, skf.SKFChest: 8, skf.SKFMidaxillary: 7.6, skf.SKFSuprailiac: 33.2, skf.SKFAbdominal: 26.4, skf.SKFThigh: 23.5, skf.SKFCalf: 16.7}, "for-age-12", 24.986, ""),
+		newCase_(male, "1985-Dec-15", map[int]float64{skf.SKFSubscapular: 20.3, skf.SKFTriceps: 11.4, skf.SKFChest: 6.5, skf.SKFMidaxillary: 15.9, skf.SKFSuprailiac: 33.4, skf.SKFAbdominal: 15.7, skf.SKFThigh: 18.3, skf.SKFCalf: 23.1}, "for-age-7", 26.145, ""),
+		newCase_(male, "1992-Dec-15", map[int]float64{skf.SKFSubscapular: 31.5, skf.SKFTriceps: 16.9, skf.SKFChest: 7, skf.SKFMidaxillary: 13.2, skf.SKFSuprailiac: 31.4, skf.SKFAbdominal: 41, skf.SKFThigh: 18.3, skf.SKFCalf: 17.2}, "for-age-14", 25.901, ""),
+		newCase_(male, "1990-Dec-15", map[int]float64{skf.SKFSubscapular: 29.4, skf.SKFTriceps: 13.7, skf.SKFChest: 12.8, skf.SKFMidaxillary: 8.3, skf.SKFSuprailiac: 45.9, skf.SKFAbdominal: 23.5, skf.SKFThigh: 21.4, skf.SKFCalf: 14.9}, "for-age-12", 22.546, ""),
+		newCase_(male, "1989-Dec-15", map[int]float64{skf.SKFSubscapular: 25.5, skf.SKFTriceps: 13.7, skf.SKFChest: 6.9, skf.SKFMidaxillary: 12.1, skf.SKFSuprailiac: 31.3, skf.SKFAbdominal: 40, skf.SKFThigh: 29.6, skf.SKFCalf: 23.3}, "for-age-11", 27.67, ""),
+		newCase_(male, "1994-Dec-15", map[int]float64{skf.SKFSubscapular: 19.4, skf.SKFTriceps: 13.7, skf.SKFChest: 11.4, skf.SKFMidaxillary: 13.4, skf.SKFSuprailiac: 42, skf.SKFAbdominal: 34.5, skf.SKFThigh: 30.3, skf.SKFCalf: 25.5}, "for-age-16", 29.012, ""),
+		newCase_(male, "1987-Dec-15", map[int]float64{skf.SKFSubscapular: 29.7, skf.SKFTriceps: 9.8, skf.SKFChest: 7.4, skf.SKFMidaxillary: 9.4, skf.SKFSuprailiac: 36.3, skf.SKFAbdominal: 38.6, skf.SKFThigh: 16, skf.SKFCalf: 24.1}, "for-age-9", 25.779, ""),
+		newCase_(male, "1986-Dec-15", map[int]float64{skf.SKFSubscapular: 32.5, skf.SKFTriceps: 9.7, skf.SKFChest: 12.2, skf.SKFMidaxillary: 14.4, skf.SKFSuprailiac: 37, skf.SKFAbdominal: 44.3, skf.SKFThigh: 19.5, skf.SKFCalf: 11.5}, "for-age-8", 18.032, ""),
+		newCase_(male, "1992-Dec-15", map[int]float64{skf.SKFSubscapular: 19.8, skf.SKFTriceps: 16, skf.SKFChest: 12, skf.SKFMidaxillary: 16.1, skf.SKFSuprailiac: 17, skf.SKFAbdominal: 25.2, skf.SKFThigh: 23.2, skf.SKFCalf: 6.4}, "for-age-14", 18.764, ""),
+		newCase_(male, "1989-Dec-15", map[int]float64{skf.SKFSubscapular: 27.2, skf.SKFTriceps: 11.7, skf.SKFChest: 7.5, skf.SKFMidaxillary: 15.9, skf.SKFSuprailiac: 29, skf.SKFAbdominal: 17.5, skf.SKFThigh: 10, skf.SKFCalf: 24.4}, "for-age-11", 27.121, ""),
+		newCase_(male, "1993-Dec-15", map[int]float64{skf.SKFSubscapular: 24.4, skf.SKFTriceps: 10.3, skf.SKFChest: 12.5, skf.SKFMidaxillary: 9.3, skf.SKFSuprailiac: 19.6, skf.SKFAbdominal: 29.5, skf.SKFThigh: 20.1, skf.SKFCalf: 23.4}, "for-age-15", 25.657, ""),
+		newCase_(male, "1985-Dec-15", map[int]float64{skf.SKFSubscapular: 29.1, skf.SKFTriceps: 11.2, skf.SKFChest: 12.4, skf.SKFMidaxillary: 12, skf.SKFSuprailiac: 34.8, skf.SKFAbdominal: 18.1, skf.SKFThigh: 11.1, skf.SKFCalf: 14.8}, "for-age-7", 20.96, ""),
+		newCase_(male, "1985-Dec-15", map[int]float64{skf.SKFSubscapular: 16.8, skf.SKFTriceps: 16.6, skf.SKFChest: 10.8, skf.SKFMidaxillary: 7.6, skf.SKFSuprailiac: 21.3, skf.SKFAbdominal: 45.4, skf.SKFThigh: 31.3, skf.SKFCalf: 14.5}, "for-age-7", 24.071, ""),
+		newCase_(male, "1985-Dec-15", map[int]float64{skf.SKFSubscapular: 22.1, skf.SKFTriceps: 16.4, skf.SKFChest: 10.2, skf.SKFMidaxillary: 9.8, skf.SKFSuprailiac: 35.9, skf.SKFAbdominal: 15.9, skf.SKFThigh: 17.8, skf.SKFCalf: 17.7}, "for-age-7", 25.901, ""),
+	}
+
+	for _, data := range cases {
+		bc := NewMenTwoSKF(data.person, data.assessment, data.skinfold)
+		if calc, err := bc.Calc(); err != nil {
+			t.Errorf("Case _%s_ failed, should not show a validation error, instead got %s", data.name, err)
+		} else if !floatEqual(calc, data.calc, 0.009) {
+			t.Errorf("Case _%s_ failed, should have value %.4f, instead got %.4f", data.name, data.calc, calc)
+		}
+	}
+}
