@@ -10,7 +10,7 @@ import (
 var (
 	NewMenSevenSKF = FactoryBodyCompositionSKF(confMenSevenSKF)
 	NewMenThreeSKF = FactoryBodyCompositionSKF(confMenThreeSKF)
-	NewMentTwoSKF  = FactoryBodyCompositionSKF(confMenTwoSKF)
+	NewMenTwoSKF  = FactoryBodyCompositionSKF(confMenTwoSKF)
 )
 
 var confMenSevenSKF = SKFEquationConf{
