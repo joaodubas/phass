@@ -21,15 +21,19 @@ func (p *Person) String() string {
 }
 
 func (p *Person) Age() float64 {
-	return elapsedFromNowIn(p.Birthday, secondsInYear)
+	return p.AgeFromDate(time.Now().UTC())
 }
 
 func (p *Person) AgeInMonths() float64 {
-	return elapsedFromNowIn(p.Birthday, secondsInMonth)
+	return p.AgeInMonthsFromDate(time.Now().UTC())
 }
 
 func (p *Person) AgeFromDate(t time.Time) float64 {
-	return elapsedFromDateIn(p.Birthday, t, secondsInYear)
+	age := t.Year() - p.Birthday.Year()
+	if t.Month() < p.Birthday.Month() || (t.Month() == p.Birthday.Month() && t.Day() < p.Birthday.Day()) {
+		age -= 1
+	}
+	return float64(age)
 }
 
 func (p *Person) AgeInMonthsFromDate(t time.Time) float64 {
@@ -52,10 +56,6 @@ func (a *Assessment) String() string {
 	return fmt.Sprintf("Assessment made in %s", a.Date.Format(TimeLayout))
 }
 
-func elapsedFromNowIn(t time.Time, in float64) float64 {
-	return elapsedFromDateIn(t, time.Now(), in)
-}
-
 func elapsedFromDateIn(from time.Time, to time.Time, in float64) float64 {
 	return to.Sub(from).Seconds() / in
 }
@@ -68,5 +68,4 @@ var (
 	hoursInDay      = 24.0
 	secondsInDay    = hoursInDay * minutesInHour * secondsInMinute
 	secondsInMonth  = daysInMonth * secondsInDay
-	secondsInYear   = daysInYear * secondsInDay
 )
