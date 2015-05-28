@@ -5,22 +5,38 @@ import (
 	assess "github.com/joaodubas/phass/assessment"
 	"github.com/joaodubas/phass/common"
 	skf "github.com/joaodubas/phass/skinfold"
+	"math"
 )
 
-type bodyCompBySKF func(*assess.Person, *assess.Assessment, *skf.Skinfolds) *BodyCompositionSKF
+/**
+ * Skinfold equations
+ */
 
-func FactoryBodyCompositionSKF(conf SKFEquationConf) bodyCompBySKF {
-	c := NewEquationConfForSKF(conf)
-	return func(p *assess.Person, a *assess.Assessment, s *skf.Skinfolds) *BodyCompositionSKF {
-		return NewBodyCompositionSKF(p, a, s, c)
-	}
-}
+var (
+	NewWomenSevenSKF = FactoryBodyCompositionSKF(confWomenSevenSKF)
+	NewWomenThreeSKF = FactoryBodyCompositionSKF(confWomenThreeSKF)
+	NewWomenTwoSKF   = FactoryBodyCompositionSKF(confWomenTwoSKF)
+	NewMenSevenSKF   = FactoryBodyCompositionSKF(confMenSevenSKF)
+	NewMenThreeSKF   = FactoryBodyCompositionSKF(confMenThreeSKF)
+	NewMenTwoSKF     = FactoryBodyCompositionSKF(confMenTwoSKF)
+)
+
+/**
+ * SKF equation definition
+ */
 
 type BodyCompositionSKF struct {
 	*assess.Person
 	*assess.Assessment
 	*skf.Skinfolds
 	*common.EquationConf
+}
+
+func FactoryBodyCompositionSKF(conf SKFEquationConf) func(*assess.Person, *assess.Assessment, *skf.Skinfolds) *BodyCompositionSKF {
+	c := NewEquationConfForSKF(conf)
+	return func(p *assess.Person, a *assess.Assessment, s *skf.Skinfolds) *BodyCompositionSKF {
+		return NewBodyCompositionSKF(p, a, s, c)
+	}
 }
 
 func NewBodyCompositionSKF(p *assess.Person, a *assess.Assessment, s *skf.Skinfolds, e *common.EquationConf) *BodyCompositionSKF {
@@ -47,6 +63,121 @@ func (b *BodyCompositionSKF) Calc() (float64, error) {
 func (b *BodyCompositionSKF) equation() common.Equationer {
 	return common.NewEquation(b.EquationConf.Extract(b), b.EquationConf)
 }
+
+/**
+ * Skfinfold conf definition
+ */
+
+var (
+	confWomenSevenSKF = SKFEquationConf{
+		name:     "Women seven skinfold equation from Jackson, Pollock, Ward",
+		gender:   assess.Female,
+		lowerAge: 18,
+		upperAge: 55,
+		skinfolds: []int{
+			skf.SKFSubscapular,
+			skf.SKFTriceps,
+			skf.SKFChest,
+			skf.SKFMidaxillary,
+			skf.SKFSuprailiac,
+			skf.SKFAbdominal,
+			skf.SKFThigh,
+		},
+		equation: func(e *common.Equation) float64 {
+			age, _ := e.In("age")
+			sskf, _ := e.In("sskf")
+			d := 1.097 - 0.00046971*sskf + 0.00000056*math.Pow(sskf, 2) - 0.00012828*age
+			return (5.01/d - 4.57) * 100.0
+		},
+	}
+	confWomenThreeSKF = SKFEquationConf{
+		name:     "Women three skinfold equation from Jackson, Pollock, Ward",
+		gender:   assess.Female,
+		lowerAge: 18,
+		upperAge: 55,
+		skinfolds: []int{
+			skf.SKFTriceps,
+			skf.SKFSuprailiac,
+			skf.SKFThigh,
+		},
+		equation: func(e *common.Equation) float64 {
+			age, _ := e.In("age")
+			sskf, _ := e.In("sskf")
+			d := 1.0994921 - 0.0009929*sskf + 0.0000023*math.Pow(sskf, 2) - 0.0001392*age
+			return (5.01/d - 4.57) * 100
+		},
+	}
+	confWomenTwoSKF = SKFEquationConf{
+		name:     "Women two skinfold equation from Slaughter et al.",
+		gender:   assess.Female,
+		lowerAge: 6,
+		upperAge: 17,
+		skinfolds: []int{
+			skf.SKFTriceps,
+			skf.SKFCalf,
+		},
+		equation: func(e *common.Equation) float64 {
+			sskf, _ := e.In("sskf")
+			return 0.735*sskf + 1.0
+		},
+	}
+	confMenSevenSKF = SKFEquationConf{
+		name:     "Men seven skinfold equation from Jackson, Pollock",
+		gender:   assess.Male,
+		lowerAge: 18,
+		upperAge: 61,
+		skinfolds: []int{
+			skf.SKFSubscapular,
+			skf.SKFTriceps,
+			skf.SKFChest,
+			skf.SKFMidaxillary,
+			skf.SKFSuprailiac,
+			skf.SKFAbdominal,
+			skf.SKFThigh,
+		},
+		equation: func(e *common.Equation) float64 {
+			age, _ := e.In("age")
+			sskf, _ := e.In("sskf")
+			d := 1.112 - 0.00043499*sskf + 0.00000055*math.Pow(sskf, 2) - 0.0002882*age
+			return (4.95/d - 4.5) * 100.0
+		},
+	}
+	confMenThreeSKF = SKFEquationConf{
+		name:     "Men three skinfold equation from Jackson, Pollock",
+		gender:   assess.Male,
+		lowerAge: 18,
+		upperAge: 61,
+		skinfolds: []int{
+			skf.SKFChest,
+			skf.SKFAbdominal,
+			skf.SKFThigh,
+		},
+		equation: func(e *common.Equation) float64 {
+			age, _ := e.In("age")
+			sskf, _ := e.In("sskf")
+			d := 1.109380 - 0.0008267*sskf + 0.0000016*math.Pow(sskf, 2) - 0.0002574*age
+			return (4.95/d - 4.5) * 100.0
+		},
+	}
+	confMenTwoSKF = SKFEquationConf{
+		name:     "Men two skinfold equation from Slaughter et al.",
+		gender:   assess.Male,
+		lowerAge: 6,
+		upperAge: 17,
+		skinfolds: []int{
+			skf.SKFTriceps,
+			skf.SKFCalf,
+		},
+		equation: func(e *common.Equation) float64 {
+			sskf, _ := e.In("sskf")
+			return 0.610*sskf + 5.1
+		},
+	}
+)
+
+/**
+ * SKF equation conf
+ */
 
 func NewEquationConfForSKF(conf SKFEquationConf) *common.EquationConf {
 	extractor := func(i interface{}) common.InParams {
