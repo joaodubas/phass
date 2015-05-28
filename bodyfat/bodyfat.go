@@ -48,8 +48,20 @@ func (b *BodyCompositionSKF) String() string {
 	return fmt.Sprintf("Body fat: %.2f %%", v)
 }
 
+func (b *BodyCompositionSKF) GetName() string {
+	return "Body composition"
+}
+
 func (b *BodyCompositionSKF) Result() ([]string, error) {
-	return []string{}, nil
+	rs := []string{}
+
+	v, err := b.Calc()
+	if err != nil {
+		return rs, err
+	}
+
+	rs = append(rs, fmt.Sprintf("Body fat: %.2f %%", v))
+	return rs, nil
 }
 
 func (b *BodyCompositionSKF) Classify() (string, error) {

@@ -170,7 +170,7 @@ func (c *Circumferences) GetName() string {
 
 // Result show the Circumferences representation.
 func (c *Circumferences) Result() ([]string, error) {
-	rs := make([]string, len(c.Measures))
+	rs := []string{}
 	for k, v := range c.Measures {
 		rs = append(rs, fmt.Sprintf("Circumference %s: %.2f cm.", NamedCircumference(k), v))
 	}

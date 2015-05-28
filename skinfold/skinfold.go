@@ -35,6 +35,19 @@ func (s *Skinfolds) String() string {
 	return fmt.Sprintf("Sum %d skinfolds: %.2f mm", len(s.Measures), s.Sum())
 }
 
+func (s *Skinfolds) GetName() string {
+	return "Skinfolds"
+}
+
+func (s *Skinfolds) Result() ([]string, error) {
+	rs := []string{}
+	for k, v := range s.Measures {
+		rs = append(rs, fmt.Sprintf("Skinfold %s: %.2f mm", NamedSkinfold(k), v))
+	}
+	rs = append(rs, fmt.Sprintf("Sum skinfolds: %.2f mm", s.Sum()))
+	return rs, nil
+}
+
 // Sum all skinfolds values.
 func (s *Skinfolds) Sum() float64 {
 	accum := 0.0
