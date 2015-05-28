@@ -22,12 +22,12 @@ const (
 // Measurer is the interface to be implemented by any struct that should convey
 // a measurement in physical assessment.
 type Measurer interface {
+	// Proxy to retrieve the measurement name.
+	GetName() string
 	// Result shows the meaningful information available from the measurement
 	// itself. It can also show an error with the measurement process is
 	// somehow invalid.
 	Result() ([]string, error)
-	// Proxy to retrieve the measurement name.
-	GetName() string
 }
 
 /**
@@ -71,7 +71,7 @@ func (a *Assessment) Result() ([]string, error) {
 			return []string{}, fmt.Errorf("Measure _%s_ failed: %s", measure.GetName(), err)
 		}
 		accum = append(accum, measure.GetName())
-		copy(accum, rs)
+		accum = append(accum, rs...)
 	}
 	return accum, nil
 }
