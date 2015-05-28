@@ -5,22 +5,24 @@ import (
 	anthropo "github.com/joaodubas/phass/anthropometry"
 	assess "github.com/joaodubas/phass/assessment"
 	bf "github.com/joaodubas/phass/bodyfat"
+	ccf "github.com/joaodubas/phass/circumference"
 	skf "github.com/joaodubas/phass/skinfold"
 	"os"
+	"strings"
 )
 
 func main() {
-	bmiPrime := anthropo.NewBMIPrime(98.0, 168.0)
-	fmt.Println(bmiPrime)
-
 	p, err := assess.NewPerson("João Paulo Dubas", "1978-Dec-15", assess.Male)
 	handleError("Ops person was not born:", err)
-	fmt.Printf("Age in years: %.2f\nAge in months %.2f\n", p.Age(), p.AgeInMonths())
 
-	a, err := assess.NewAssessment("2015-Dec-15")
+	a, err := assess.NewAssessment("2015-May-15")
 	handleError("Ops assessment not done:", err)
-	fmt.Println(a)
 
+	// add anthropometric
+	bmi := anthropo.NewBMIPrime(98.0, 168.0)
+	a.AddMeasure(bmi)
+
+	// add skinfold
 	skfs := skf.NewSkinfolds(map[int]float64{
 		skf.SKFChest:       5.0,
 		skf.SKFAbdominal:   10.0,
@@ -30,12 +32,28 @@ func main() {
 		skf.SKFSubscapular: 30.0,
 		skf.SKFSuprailiac:  35.0,
 	})
-	fmt.Println(skfs)
+	a.AddMeasure(skfs)
 
-	comp := bf.NewWomenSevenSKF(p, a, skfs)
-	fmt.Println(comp)
-	comp = bf.NewMenSevenSKF(p, a, skfs)
-	fmt.Println(comp)
+	// add bodyfat
+	a.AddMeasure(bf.NewMenSevenSKF(p, a, skfs))
+
+	// add circunferences
+	ccfs := ccf.NewCircumferences(map[int]float64{
+		ccf.CCFWaist: 98.2,
+		ccf.CCFHip: 104.1,
+	})
+	a.AddMeasure(ccfs)
+
+	// add waist-to-hip
+	a.AddMeasure(ccf.NewWaistToHipRatio(p, a, ccfs.Measures))
+
+	// add conicity index
+	a.AddMeasure(ccf.NewConicityIndex(bmi.Anthropometry, ccfs.Measures))
+
+	// show result
+	rs, err := a.Result()
+	handleError("Ops an assessment failed:", err)
+	fmt.Println(strings.Join(rs, "\n"))
 }
 
 func handleError(tmpl string, err error) {
