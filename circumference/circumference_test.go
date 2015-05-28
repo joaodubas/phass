@@ -3,7 +3,6 @@ package circumference
 import (
 	assess "github.com/joaodubas/phass/assessment"
 	"math"
-	"strings"
 	"testing"
 )
 
@@ -91,11 +90,11 @@ func TestWaistToHipCalcAndClassification(t *testing.T) {
 	}
 
 	for _, data := range cases {
-		if calc := data.wth.Calc(); !floatEqual(calc, data.calc, wthLimit) {
+		if calc, _ := data.wth.Calc(); !floatEqual(calc, data.calc, wthLimit) {
 			t.Errorf("Calc is %.3f, expected is %.3f", calc, data.calc)
 		}
 
-		if classify := data.wth.Classify(); classify != data.classify {
+		if classify, _ := data.wth.Classify(); classify != data.classify {
 			t.Errorf("Classify is %s, expected is %s", classify, data.classify)
 		}
 	}
@@ -122,10 +121,10 @@ func TestWaistToHipMissingMeasure(t *testing.T) {
 	}
 
 	for _, data := range cases {
-		if data.Calc() > 0.0 {
+		if _, err := data.Calc(); err != nil {
 			t.Error("Should not get a waist-to-hip value")
 		}
-		if !strings.Contains(data.Classify(), "No classification") {
+		if _, err := data.Classify(); err != nil {
 			t.Errorf("Should not get a waist-to-hip classification")
 		}
 	}
@@ -166,10 +165,10 @@ func TestWaistToHipOutsideAgeRange(t *testing.T) {
 	}
 
 	for _, data := range cases {
-		if data.Calc() < 1.0 {
-			t.Errorf("WTH should be almost equal to 1.00 get %.2f", data.Calc())
+		if r, err := data.Calc(); err == nil {
+			t.Errorf("WTH should not have a value due to age outside valid range, %.4f", r)
 		}
-		if !strings.Contains(data.Classify(), "No classification") {
+		if _, err := data.Classify(); err == nil {
 			t.Error("WTH do not have classification due to age outside valid range")
 		}
 	}
