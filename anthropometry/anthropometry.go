@@ -21,7 +21,7 @@ var NewBMIPrime = newAnthropoRatio(
 	},
 	bmiPrimeConf,
 	func(a assess.Measurer) []string {
-		i := a.(*anthropoRatio)
+		i := a.(*AnthropometricRatio)
 		v, _ := i.Calc()
 		c, _ := i.Classify()
 		return []string{
@@ -44,7 +44,7 @@ var NewBMI = newAnthropoRatio(
 	},
 	bmiConf,
 	func(a assess.Measurer) []string {
-		i := a.(*anthropoRatio)
+		i := a.(*AnthropometricRatio)
 		v, _ := i.Calc()
 		c, _ := i.Classify()
 		return []string{
@@ -88,9 +88,9 @@ func (a *Anthropometry) Result() ([]string, error) {
  * Anthropometric index
  */
 
-// anthropoRatio represents a given anthropometric ratio. It's main
+// AnthropmetricRatio represents a given anthropometric ratio. It's main
 // responsability is to implement Measurer interface for any ratio.
-type anthropoRatio struct {
+type AnthropometricRatio struct {
 	*Anthropometry
 	// lim represents the limits for a given classification value
 	lim map[int][2]float64
@@ -104,32 +104,32 @@ type anthropoRatio struct {
 
 // newAnthropometricRatio returns a function that create a new anthropoRatio
 // instance.
-func newAnthropoRatio(lim map[int][2]float64, prt func(float64, float64) assess.Measurer, conf *common.EquationConf, result func(assess.Measurer) []string) func(float64, float64) *anthropoRatio {
-	ai := new(anthropoRatio)
+func newAnthropoRatio(lim map[int][2]float64, prt func(float64, float64) assess.Measurer, conf *common.EquationConf, result func(assess.Measurer) []string) func(float64, float64) *AnthropometricRatio {
+	ai := new(AnthropometricRatio)
 	ai.lim = lim
 	ai.conf = conf
 	ai.result = result
-	return func(weight, height float64) *anthropoRatio {
+	return func(weight, height float64) *AnthropometricRatio {
 		ai.Anthropometry = NewAnthropometry(weight, height)
 		ai.prt = prt(weight, height)
 		return ai
 	}
 }
 
-func (i *anthropoRatio) String() string {
+func (i *AnthropometricRatio) String() string {
 	prs, _ := i.prt.Result()
 	rs, _ := i.Result()
 	return fmt.Sprintf("%s\n%s", strings.Join(prs, "\n"), strings.Join(rs, "\n"))
 }
 
 // GetName retrieves the common name for any anthropometric index
-func (i *anthropoRatio) GetName() string {
+func (i *AnthropometricRatio) GetName() string {
 	return "Anthropometry"
 }
 
 // Result returns the measurement representation, and an optional error if any
 // violation was made for the measurement.
-func (i *anthropoRatio) Result() ([]string, error) {
+func (i *AnthropometricRatio) Result() ([]string, error) {
 	rs := []string{}
 
 	if _, err := i.Calc(); err != nil {
@@ -152,7 +152,7 @@ func (i *anthropoRatio) Result() ([]string, error) {
 
 // Classify returns the classification for the given measurement calc, and an
 // optional error.
-func (i *anthropoRatio) Classify() (string, error) {
+func (i *AnthropometricRatio) Classify() (string, error) {
 	v, err := i.Calc()
 	if err != nil {
 		return "", err
@@ -161,13 +161,13 @@ func (i *anthropoRatio) Classify() (string, error) {
 }
 
 // Calc returns the measurement value, and an optional error.
-func (i *anthropoRatio) Calc() (float64, error) {
+func (i *AnthropometricRatio) Calc() (float64, error) {
 	return i.equation().Calc()
 }
 
 // equation returns the Equation instance used to validate and calculate the
 // measurement value.
-func (i *anthropoRatio) equation() common.Equationer {
+func (i *AnthropometricRatio) equation() common.Equationer {
 	return common.NewEquation(i.conf.Extract(i.Anthropometry), i.conf)
 }
 
