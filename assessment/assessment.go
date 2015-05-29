@@ -109,6 +109,19 @@ func (p *Person) String() string {
 	return fmt.Sprintf("Name: %s\nGender: %s\nAge: %.0f", p.FullName, p.genderRepr(), p.Age())
 }
 
+func (p *Person) GetName() string {
+	return "Person"
+}
+
+func (p *Person) Result() ([]string, error) {
+	rs := []string{
+		fmt.Sprintf("Name: %s", p.FullName),
+		fmt.Sprintf("Age: %.0f years", p.Age()),
+		fmt.Sprintf("Age: %.1f months", p.AgeInMonths()),
+	}
+	return rs, nil
+}
+
 func (p *Person) Age() float64 {
 	return p.AgeFromDate(time.Now().UTC())
 }
