@@ -40,7 +40,7 @@ func main() {
 	// add circunferences
 	ccfs := ccf.NewCircumferences(map[int]float64{
 		ccf.CCFWaist: 98.2,
-		ccf.CCFHip: 104.1,
+		ccf.CCFHip:   104.1,
 	})
 	a.AddMeasure(ccfs)
 
