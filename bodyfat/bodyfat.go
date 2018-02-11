@@ -2,16 +2,18 @@ package bodyfat
 
 import (
 	"fmt"
+	"math"
+
 	assess "github.com/joaodubas/phass/assessment"
 	"github.com/joaodubas/phass/common"
 	skf "github.com/joaodubas/phass/skinfold"
-	"math"
 )
 
 /**
  * Skinfold equations
  */
 
+// Skinfold percentage of fat estimation for differents genders.
 var (
 	NewWomenSevenSKF = FactoryBodyCompositionSKF(confWomenSevenSKF)
 	NewWomenThreeSKF = FactoryBodyCompositionSKF(confWomenThreeSKF)
@@ -25,6 +27,9 @@ var (
  * SKF equation definition
  */
 
+// BodyCompositionSKF contains data needed to estimate body composition of a
+// given person, based in skilfold assessment. This is composition of different
+// structs, such as: a person, assessment details, skinfolds and an equation.
 type BodyCompositionSKF struct {
 	*assess.Person
 	*assess.Assessment
@@ -32,6 +37,9 @@ type BodyCompositionSKF struct {
 	*common.EquationConf
 }
 
+// FactoryBodyCompositionSKF factory to create new body composition assesment by
+// skilfolds methods. It returns a function to create new BodyCompositionSKF
+// structs.
 func FactoryBodyCompositionSKF(conf SKFEquationConf) func(*assess.Person, *assess.Assessment, *skf.Skinfolds) *BodyCompositionSKF {
 	c := NewEquationConfForSKF(conf)
 	return func(p *assess.Person, a *assess.Assessment, s *skf.Skinfolds) *BodyCompositionSKF {
@@ -39,6 +47,9 @@ func FactoryBodyCompositionSKF(conf SKFEquationConf) func(*assess.Person, *asses
 	}
 }
 
+// NewBodyCompositionSKF create a new body composition assessment. It receives
+// person, an assessment, skinfolds, and the equation to estimate body fat
+// percentange. Returns a pointer to BodyCompostionSKF.
 func NewBodyCompositionSKF(p *assess.Person, a *assess.Assessment, s *skf.Skinfolds, e *common.EquationConf) *BodyCompositionSKF {
 	return &BodyCompositionSKF{p, a, s, e}
 }
@@ -48,10 +59,12 @@ func (b *BodyCompositionSKF) String() string {
 	return fmt.Sprintf("Body fat: %.2f %%", v)
 }
 
+// GetName returns this measurement name.
 func (b *BodyCompositionSKF) GetName() string {
 	return "Body composition"
 }
 
+// Result returns information about body composition assessment.
 func (b *BodyCompositionSKF) Result() ([]string, error) {
 	rs := []string{}
 
@@ -64,14 +77,17 @@ func (b *BodyCompositionSKF) Result() ([]string, error) {
 	return rs, nil
 }
 
+// Classify returns classification related to body fat percentage.
 func (b *BodyCompositionSKF) Classify() (string, error) {
 	return "", nil
 }
 
+// Calc returns value for estimate body fat percentage.
 func (b *BodyCompositionSKF) Calc() (float64, error) {
 	return b.equation().Calc()
 }
 
+// equation returns a equation, used to estimate body fat percentage.
 func (b *BodyCompositionSKF) equation() common.Equationer {
 	return common.NewEquation(b.EquationConf.Extract(b), b.EquationConf)
 }
@@ -80,6 +96,7 @@ func (b *BodyCompositionSKF) equation() common.Equationer {
  * Skfinfold conf definition
  */
 
+// Popular skinfold equations to estimate body fat.
 var (
 	confWomenSevenSKF = SKFEquationConf{
 		name:     "Women seven skinfold equation from Jackson, Pollock, Ward",
@@ -191,6 +208,8 @@ var (
  * SKF equation conf
  */
 
+// NewEquationConfForSKF returns an equation configuration based in provided
+// configuration.
 func NewEquationConfForSKF(conf SKFEquationConf) *common.EquationConf {
 	extractor := func(i interface{}) common.InParams {
 		c := i.(*BodyCompositionSKF)
@@ -215,6 +234,7 @@ func NewEquationConfForSKF(conf SKFEquationConf) *common.EquationConf {
 	return common.NewEquationConf(conf.name, extractor, validators, conf.equation)
 }
 
+// SKFEquationConf common configuration for skinfold equations.
 type SKFEquationConf struct {
 	name      string
 	gender    int
