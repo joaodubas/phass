@@ -8,8 +8,11 @@ import (
 /**
  * Constants
  */
+
+// TimeLayout common date representation.
 const TimeLayout = "2006-Jan-02"
 
+// Gender constant values.
 const (
 	Male int = iota
 	Female
@@ -42,7 +45,9 @@ type Assessment struct {
 	Measures []Measurer
 }
 
-// NewAssessment returns an Assessment instance
+// NewAssessment returns an Assessment instance. It receives the date whe it
+// was made, and a list of measurements. Returns an Assessment pointer and
+// error.
 func NewAssessment(date string, measurements ...Measurer) (*Assessment, error) {
 	a := &Assessment{Measures: measurements}
 	d, err := time.Parse(TimeLayout, date)
@@ -54,15 +59,24 @@ func NewAssessment(date string, measurements ...Measurer) (*Assessment, error) {
 }
 
 func (a *Assessment) String() string {
-	return fmt.Sprintf("Assessment made in %s", a.Date.Format(TimeLayout))
+	measurements := ""
+	for idx, m := range a.Measures {
+		tmpl := "%s, %s"
+		if idx == 0 {
+			tmpl = "%s%s"
+		}
+		measurements = fmt.Sprintf(tmpl, measurements, m.GetName())
+	}
+	return fmt.Sprintf("Assessment made in %s. With the measurements %s.", a.Date.Format(TimeLayout), measurements)
 }
 
+// GetName returns this assessment name representation.
 func (a *Assessment) GetName() string {
 	return a.String()
 }
 
 // Result aggregates all measures results into one representation. If one
-// measure can't has error, then the given error is returned.
+// measure has error, then the given error is returned.
 func (a *Assessment) Result() ([]string, error) {
 	accum := []string{}
 	for _, measure := range a.Measures {
@@ -93,6 +107,9 @@ type Person struct {
 	Gender   int
 }
 
+// NewPerson creates a Person representation, for assessment purposes a person
+// must have a full name, a birth date, and a gender. This returnas a pointer
+// to a Person instance, and an error, when some information is invalid.
 func NewPerson(fullName string, birth string, gender int) (*Person, error) {
 	p := &Person{}
 	b, err := time.Parse(TimeLayout, birth)
@@ -109,39 +126,48 @@ func (p *Person) String() string {
 	return fmt.Sprintf("Name: %s\nGender: %s\nAge: %.0f", p.FullName, p.genderRepr(), p.Age())
 }
 
+// GetName return this measurement name.
 func (p *Person) GetName() string {
 	return "Person"
 }
 
+// Result get common representation for this measurement result.
 func (p *Person) Result() ([]string, error) {
 	rs := []string{
 		fmt.Sprintf("Name: %s", p.FullName),
+		fmt.Sprintf("Gender: %s", p.genderRepr()),
 		fmt.Sprintf("Age: %.0f years", p.Age()),
 		fmt.Sprintf("Age: %.1f months", p.AgeInMonths()),
 	}
 	return rs, nil
 }
 
+// Age calculate this Person age in years.
 func (p *Person) Age() float64 {
 	return p.AgeFromDate(time.Now().UTC())
 }
 
+// AgeInMonths calculate this Person age in months.
 func (p *Person) AgeInMonths() float64 {
 	return p.AgeInMonthsFromDate(time.Now().UTC())
 }
 
+// AgeFromDate calculate this Person age in years, based in a given time.
 func (p *Person) AgeFromDate(t time.Time) float64 {
 	age := t.Year() - p.Birthday.Year()
 	if t.Month() < p.Birthday.Month() || (t.Month() == p.Birthday.Month() && t.Day() < p.Birthday.Day()) {
-		age -= 1
+		age--
 	}
 	return float64(age)
 }
 
+// AgeInMonthsFromDate calculate this Person age in months, based in a given
+// time.
 func (p *Person) AgeInMonthsFromDate(t time.Time) float64 {
 	return elapsedFromDateIn(p.Birthday, t, secondsInMonth)
 }
 
+// genderRepr convert the constant gender into string representation.
 func (p *Person) genderRepr() string {
 	choices := map[int]string{
 		Male:   "Male",
