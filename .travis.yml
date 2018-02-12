@@ -17,7 +17,7 @@ before_script:
   # Install linters
   - go get -u github.com/golang/lint/golint
   - go get -u honnef.co/go/tools/cmd/megacheck
-  - go get -u github.com/fzipp/gocycle
+  - go get -u github.com/fzipp/gocyclo
   - go get -u github.com/kisielk/errcheck
   # Install goveralls, Go integration coveralls.io
   - go get -u github.com/mattn/goveralls
