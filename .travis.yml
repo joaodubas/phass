@@ -1,0 +1,33 @@
+---
+# Based in travis conf from:
+# 1. https://github.com/sudo-suhas/symcrypto/blob/master/.travis.yml
+# 2. https://gist.github.com/y0ssar1an/df2dab474520c4086926f672c52db139
+
+language: go
+go:
+  - 1.9
+  - 1.8
+install: true
+notifciations:
+  email: false
+before_script:
+  # Setup env vars to make lint/tests easier
+  - GO_FILES=$(find . -iname '*.go' | grep -v /vendor/)  # All the .go files, excluding vendor/
+  - PKGS=$(go list ./... | grep -v /vendor/)             # All the import paths, excluding vendor/
+  # Install linters
+  - go get -u github.com/golang/lint/golint
+  - go get -u honnef.co/go/tools/cmd/megacheck
+  - go get -u github.com/fzipp/gocycle
+  - go get -u github.com/kisielk/errcheck
+  # Install goveralls, Go integration coveralls.io
+  - go get -u github.com/mattn/goveralls
+script:
+  - test -z $(gofmt -s -l $GO_FILES)  # Fail if a .go file hasn't been formatted with gofmt
+  - go vet $PKGS                      # go vet is the official Go static analyzer
+  - megacheck $PKGS                   # "go vet" on steroids + linter
+  - errcheck $PKGS                    # Check for unchecked errors
+  - gocyclo -over 19 $GO_FILES        # forbid code with huge functions
+  - golint -set_exit_status $PKGS     # One last linter
+  # Run all tests
+  - go test -v -covermode=count -coverprofile=profile.cov $PKGS
+  - goveralls -coverprofile=profile.cov -service=travis-ci
