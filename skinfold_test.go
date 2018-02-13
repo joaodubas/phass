@@ -1,7 +1,6 @@
-package skinfold
+package phass
 
 import (
-	"math"
 	"testing"
 )
 
@@ -45,9 +44,4 @@ func TestSkinfoldsSum(t *testing.T) {
 	if !floatEqual(skf.SumSpecific(skfAppendicular), skfSumAppendicular, 0.01) {
 		t.Errorf("Summed %.2f, expted %.2f", skf.SumSpecific(skfAppendicular), skfSumAppendicular)
 	}
-}
-
-func floatEqual(original, expected, limit float64) bool {
-	diff := math.Abs(original - expected)
-	return diff <= limit
 }
