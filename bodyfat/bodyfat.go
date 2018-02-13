@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"math"
 
+	"github.com/joaodubas/phass"
 	assess "github.com/joaodubas/phass/assessment"
-	"github.com/joaodubas/phass/common"
 	skf "github.com/joaodubas/phass/skinfold"
 )
 
@@ -34,7 +34,7 @@ type BodyCompositionSKF struct {
 	*assess.Person
 	*assess.Assessment
 	*skf.Skinfolds
-	*common.EquationConf
+	*phass.EquationConf
 }
 
 // FactoryBodyCompositionSKF factory to create new body composition assesment by
@@ -50,7 +50,7 @@ func FactoryBodyCompositionSKF(conf SKFEquationConf) func(*assess.Person, *asses
 // NewBodyCompositionSKF create a new body composition assessment. It receives
 // person, an assessment, skinfolds, and the equation to estimate body fat
 // percentange. Returns a pointer to BodyCompostionSKF.
-func NewBodyCompositionSKF(p *assess.Person, a *assess.Assessment, s *skf.Skinfolds, e *common.EquationConf) *BodyCompositionSKF {
+func NewBodyCompositionSKF(p *assess.Person, a *assess.Assessment, s *skf.Skinfolds, e *phass.EquationConf) *BodyCompositionSKF {
 	return &BodyCompositionSKF{p, a, s, e}
 }
 
@@ -88,8 +88,8 @@ func (b *BodyCompositionSKF) Calc() (float64, error) {
 }
 
 // equation returns a equation, used to estimate body fat percentage.
-func (b *BodyCompositionSKF) equation() common.Equationer {
-	return common.NewEquation(b.EquationConf.Extract(b), b.EquationConf)
+func (b *BodyCompositionSKF) equation() phass.Equationer {
+	return phass.NewEquation(b.EquationConf.Extract(b), b.EquationConf)
 }
 
 /**
@@ -112,7 +112,7 @@ var (
 			skf.SKFAbdominal,
 			skf.SKFThigh,
 		},
-		equation: func(e *common.Equation) float64 {
+		equation: func(e *phass.Equation) float64 {
 			age, _ := e.In("age")
 			sskf, _ := e.In("sskf")
 			d := 1.097 - 0.00046971*sskf + 0.00000056*math.Pow(sskf, 2) - 0.00012828*age
@@ -129,7 +129,7 @@ var (
 			skf.SKFSuprailiac,
 			skf.SKFThigh,
 		},
-		equation: func(e *common.Equation) float64 {
+		equation: func(e *phass.Equation) float64 {
 			age, _ := e.In("age")
 			sskf, _ := e.In("sskf")
 			d := 1.0994921 - 0.0009929*sskf + 0.0000023*math.Pow(sskf, 2) - 0.0001392*age
@@ -145,7 +145,7 @@ var (
 			skf.SKFTriceps,
 			skf.SKFCalf,
 		},
-		equation: func(e *common.Equation) float64 {
+		equation: func(e *phass.Equation) float64 {
 			sskf, _ := e.In("sskf")
 			return 0.735*sskf + 1.0
 		},
@@ -164,7 +164,7 @@ var (
 			skf.SKFAbdominal,
 			skf.SKFThigh,
 		},
-		equation: func(e *common.Equation) float64 {
+		equation: func(e *phass.Equation) float64 {
 			age, _ := e.In("age")
 			sskf, _ := e.In("sskf")
 			d := 1.112 - 0.00043499*sskf + 0.00000055*math.Pow(sskf, 2) - 0.0002882*age
@@ -181,7 +181,7 @@ var (
 			skf.SKFAbdominal,
 			skf.SKFThigh,
 		},
-		equation: func(e *common.Equation) float64 {
+		equation: func(e *phass.Equation) float64 {
 			age, _ := e.In("age")
 			sskf, _ := e.In("sskf")
 			d := 1.109380 - 0.0008267*sskf + 0.0000016*math.Pow(sskf, 2) - 0.0002574*age
@@ -197,7 +197,7 @@ var (
 			skf.SKFTriceps,
 			skf.SKFCalf,
 		},
-		equation: func(e *common.Equation) float64 {
+		equation: func(e *phass.Equation) float64 {
 			sskf, _ := e.In("sskf")
 			return 0.610*sskf + 5.1
 		},
@@ -210,8 +210,8 @@ var (
 
 // NewEquationConfForSKF returns an equation configuration based in provided
 // configuration.
-func NewEquationConfForSKF(conf SKFEquationConf) *common.EquationConf {
-	extractor := func(i interface{}) common.InParams {
+func NewEquationConfForSKF(conf SKFEquationConf) *phass.EquationConf {
+	extractor := func(i interface{}) phass.InParams {
 		c := i.(*BodyCompositionSKF)
 		r := map[string]float64{
 			"gender": float64(c.Gender),
@@ -225,13 +225,13 @@ func NewEquationConfForSKF(conf SKFEquationConf) *common.EquationConf {
 		}
 		return r
 	}
-	validators := []common.Validator{
-		common.ValidateMeasures([]string{"gender", "age", "sskf"}),
-		common.ValidateGender(conf.gender),
-		common.ValidateAge(conf.lowerAge, conf.upperAge),
+	validators := []phass.Validator{
+		phass.ValidateMeasures([]string{"gender", "age", "sskf"}),
+		phass.ValidateGender(conf.gender),
+		phass.ValidateAge(conf.lowerAge, conf.upperAge),
 		validateSkinfolds(conf.skinfolds),
 	}
-	return common.NewEquationConf(conf.name, extractor, validators, conf.equation)
+	return phass.NewEquationConf(conf.name, extractor, validators, conf.equation)
 }
 
 // SKFEquationConf common configuration for skinfold equations.
@@ -241,11 +241,11 @@ type SKFEquationConf struct {
 	lowerAge  float64
 	upperAge  float64
 	skinfolds []int
-	equation  common.Calculator
+	equation  phass.Calculator
 }
 
-func validateSkinfolds(skfs []int) common.Validator {
-	return func(e *common.Equation) (bool, error) {
+func validateSkinfolds(skfs []int) phass.Validator {
+	return func(e *phass.Equation) (bool, error) {
 		for _, k := range skfs {
 			if _, ok := e.In(skf.NamedSkinfold(k)); !ok {
 				return false, fmt.Errorf("Missing skinfold %s", skf.NamedSkinfold(k))

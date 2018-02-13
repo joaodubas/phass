@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"math"
 
+	"github.com/joaodubas/phass"
 	anthropo "github.com/joaodubas/phass/anthropometry"
 	assess "github.com/joaodubas/phass/assessment"
-	"github.com/joaodubas/phass/common"
 )
 
 /**
@@ -95,8 +95,8 @@ func (c *ConicityIndex) Calc() (float64, error) {
 }
 
 // equation returns an equation, used to calculate conicity index.
-func (c *ConicityIndex) equation() common.Equationer {
-	return common.NewEquation(cidConf.Extract(c), cidConf)
+func (c *ConicityIndex) equation() phass.Equationer {
+	return phass.NewEquation(cidConf.Extract(c), cidConf)
 }
 
 /**
@@ -167,7 +167,7 @@ func (w *WaistToHip) Classify() (string, error) {
 		if age < limits[0] || age >= limits[1] {
 			continue
 		}
-		return common.Classifier(v, classes, WTHClassification), nil
+		return phass.Classifier(v, classes, WTHClassification), nil
 	}
 
 	return "", fmt.Errorf("No classification for age %.0f", age)
@@ -179,8 +179,8 @@ func (w *WaistToHip) Calc() (float64, error) {
 }
 
 // equation returns an equation, used to calculate waist-to-hip.
-func (w *WaistToHip) equation() common.Equationer {
-	return common.NewEquation(wthConf.Extract(w), wthConf)
+func (w *WaistToHip) equation() phass.Equationer {
+	return phass.NewEquation(wthConf.Extract(w), wthConf)
 }
 
 /**
@@ -237,9 +237,9 @@ func NamedCircumference(name int) string {
  */
 
 var (
-	wthConf = common.NewEquationConf(
+	wthConf = phass.NewEquationConf(
 		"Waist to Hip ratio",
-		func(i interface{}) common.InParams {
+		func(i interface{}) phass.InParams {
 			ci := i.(*WaistToHip)
 			return map[string]float64{
 				"age":                        ci.Person.AgeFromDate(ci.Assessment.Date),
@@ -248,19 +248,19 @@ var (
 				NamedCircumference(CCFHip):   ci.Circumferences.Measures[CCFHip],
 			}
 		},
-		[]common.Validator{
-			common.ValidateAge(20, 69),
-			common.ValidateMeasures([]string{"age", "gender", NamedCircumference(CCFWaist), NamedCircumference(CCFHip)}),
+		[]phass.Validator{
+			phass.ValidateAge(20, 69),
+			phass.ValidateMeasures([]string{"age", "gender", NamedCircumference(CCFWaist), NamedCircumference(CCFHip)}),
 		},
-		func(e *common.Equation) float64 {
+		func(e *phass.Equation) float64 {
 			w, _ := e.In(NamedCircumference(CCFWaist))
 			h, _ := e.In(NamedCircumference(CCFHip))
 			return w / h
 		},
 	)
-	cidConf = common.NewEquationConf(
+	cidConf = phass.NewEquationConf(
 		"Conicity index",
-		func(i interface{}) common.InParams {
+		func(i interface{}) phass.InParams {
 			ci := i.(*ConicityIndex)
 			rs := map[string]float64{
 				"weight": ci.Anthropometry.Weight,
@@ -271,10 +271,10 @@ var (
 			}
 			return rs
 		},
-		[]common.Validator{
-			common.ValidateMeasures([]string{"weight", "height", NamedCircumference(CCFWaist)}),
+		[]phass.Validator{
+			phass.ValidateMeasures([]string{"weight", "height", NamedCircumference(CCFWaist)}),
 		},
-		func(e *common.Equation) float64 {
+		func(e *phass.Equation) float64 {
 			w, _ := e.In("weight")
 			h, _ := e.In("height")
 			c, _ := e.In(NamedCircumference(CCFWaist))

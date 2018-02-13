@@ -1,12 +1,13 @@
 package bodyfat
 
 import (
-	assess "github.com/joaodubas/phass/assessment"
-	"github.com/joaodubas/phass/common"
-	skf "github.com/joaodubas/phass/skinfold"
 	"math"
 	"strings"
 	"testing"
+
+	"github.com/joaodubas/phass"
+	assess "github.com/joaodubas/phass/assessment"
+	skf "github.com/joaodubas/phass/skinfold"
 )
 
 /**
@@ -23,7 +24,7 @@ func TestBodyFatCompositionValidation(t *testing.T) {
 			skf.SKFSuprailiac,
 			skf.SKFThigh,
 		},
-		equation: func(e *common.Equation) float64 {
+		equation: func(e *phass.Equation) float64 {
 			age, _ := e.In("age")
 			sum, _ := e.In("sskf")
 			d := 1.01 - 0.0001*sum + 0.0000004*sum*sum - 0.000001*age
