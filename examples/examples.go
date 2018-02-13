@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	"github.com/joaodubas/phass"
-	bf "github.com/joaodubas/phass/bodyfat"
 )
 
 func main() {
@@ -33,7 +32,7 @@ func main() {
 	a.AddMeasure(skfs)
 
 	// add bodyfat
-	a.AddMeasure(bf.NewMenSevenSKF(p, a, skfs))
+	a.AddMeasure(phass.NewMenSevenSKF(p, a, skfs))
 
 	// add circunferences
 	ccfs := phass.NewCircumferences(map[int]float64{
