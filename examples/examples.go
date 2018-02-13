@@ -2,20 +2,21 @@ package main
 
 import (
 	"fmt"
+	"os"
+	"strings"
+
+	"github.com/joaodubas/phass"
 	anthropo "github.com/joaodubas/phass/anthropometry"
-	assess "github.com/joaodubas/phass/assessment"
 	bf "github.com/joaodubas/phass/bodyfat"
 	ccf "github.com/joaodubas/phass/circumference"
 	skf "github.com/joaodubas/phass/skinfold"
-	"os"
-	"strings"
 )
 
 func main() {
-	p, err := assess.NewPerson("João Paulo Dubas", "1978-Dec-15", assess.Male)
+	p, err := phass.NewPerson("João Paulo Dubas", "1978-Dec-15", phass.Male)
 	handleError("Ops person was not born:", err)
 
-	a, err := assess.NewAssessment("2015-May-15")
+	a, err := phass.NewAssessment("2015-May-15")
 	handleError("Ops assessment not done:", err)
 
 	// add anthropometric

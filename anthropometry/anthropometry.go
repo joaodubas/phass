@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	"github.com/joaodubas/phass"
-	assess "github.com/joaodubas/phass/assessment"
 )
 
 /**
@@ -17,11 +16,11 @@ import (
 // classify a BMI Prime based on weight and height.
 var NewBMIPrime = newAnthropoRatio(
 	limitsForBMIPrime,
-	func(w, h float64) assess.Measurer {
+	func(w, h float64) phass.Measurer {
 		return NewBMI(w, h)
 	},
 	bmiPrimeConf,
-	func(a assess.Measurer) []string {
+	func(a phass.Measurer) []string {
 		i := a.(*AnthropometricRatio)
 		v, _ := i.Calc()
 		c, _ := i.Classify()
@@ -40,11 +39,11 @@ var NewBMIPrime = newAnthropoRatio(
 // a BMI based on weight and height.
 var NewBMI = newAnthropoRatio(
 	limitsForBMI,
-	func(w, h float64) assess.Measurer {
+	func(w, h float64) phass.Measurer {
 		return NewAnthropometry(w, h)
 	},
 	bmiConf,
-	func(a assess.Measurer) []string {
+	func(a phass.Measurer) []string {
 		i := a.(*AnthropometricRatio)
 		v, _ := i.Calc()
 		c, _ := i.Classify()
@@ -98,11 +97,11 @@ type AnthropometricRatio struct {
 	// lim represents the limits for a given classification value
 	lim map[int][2]float64
 	// prt is the parent measurement
-	prt assess.Measurer
+	prt phass.Measurer
 	// conf defines the equation configuration for the given ratio
 	conf *phass.EquationConf
 	// result knows how to represent the results for the given measurement
-	result func(assess.Measurer) []string
+	result func(phass.Measurer) []string
 }
 
 // newAnthropometricRatio create a anthropometric ratio, that is comprised of a
@@ -111,9 +110,9 @@ type AnthropometricRatio struct {
 // Returns a function that create a new AnthropoRatio instance.
 func newAnthropoRatio(
 	lim map[int][2]float64,
-	prt func(float64, float64) assess.Measurer,
+	prt func(float64, float64) phass.Measurer,
 	conf *phass.EquationConf,
-	result func(assess.Measurer) []string,
+	result func(phass.Measurer) []string,
 ) func(float64, float64) *AnthropometricRatio {
 	ai := new(AnthropometricRatio)
 	ai.lim = lim

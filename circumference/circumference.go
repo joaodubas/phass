@@ -6,7 +6,6 @@ import (
 
 	"github.com/joaodubas/phass"
 	anthropo "github.com/joaodubas/phass/anthropometry"
-	assess "github.com/joaodubas/phass/assessment"
 )
 
 /**
@@ -106,14 +105,14 @@ func (c *ConicityIndex) equation() phass.Equationer {
 // WaistToHip represents the waits-to-hip ratio, a proxy for abdominal
 // adiposity.
 type WaistToHip struct {
-	*assess.Person
-	*assess.Assessment
+	*phass.Person
+	*phass.Assessment
 	*Circumferences
 }
 
 // NewWaistToHipRatio creates a new pointer to waist-to-hip, based in person,
 // assessment and circumference measures.
-func NewWaistToHipRatio(person *assess.Person, assessment *assess.Assessment, measures map[int]float64) *WaistToHip {
+func NewWaistToHipRatio(person *phass.Person, assessment *phass.Assessment, measures map[int]float64) *WaistToHip {
 	return &WaistToHip{person, assessment, NewCircumferences(measures)}
 }
 
@@ -306,7 +305,7 @@ var WTHClassification = map[int]string{
 // wthLimits represent the classification limits for any given gender, age, and
 // waist-to-hip ratio vlaue.
 var wthLimits = map[int]map[[2]float64]map[int][2]float64{
-	assess.Male: map[[2]float64]map[int][2]float64{
+	phass.Male: map[[2]float64]map[int][2]float64{
 		[2]float64{20, 30}: map[int][2]float64{
 			WTHLow:      [2]float64{math.Inf(-1), 0.83},
 			WTHModerate: [2]float64{0.83, 0.89},
@@ -338,7 +337,7 @@ var wthLimits = map[int]map[[2]float64]map[int][2]float64{
 			WTHVeryHigh: [2]float64{1.03, math.Inf(+1)},
 		},
 	},
-	assess.Female: map[[2]float64]map[int][2]float64{
+	phass.Female: map[[2]float64]map[int][2]float64{
 		[2]float64{20, 30}: map[int][2]float64{
 			WTHLow:      [2]float64{math.Inf(-1), 0.71},
 			WTHModerate: [2]float64{0.71, 0.78},

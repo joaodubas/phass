@@ -5,7 +5,6 @@ import (
 	"math"
 
 	"github.com/joaodubas/phass"
-	assess "github.com/joaodubas/phass/assessment"
 	skf "github.com/joaodubas/phass/skinfold"
 )
 
@@ -31,8 +30,8 @@ var (
 // given person, based in skilfold assessment. This is composition of different
 // structs, such as: a person, assessment details, skinfolds and an equation.
 type BodyCompositionSKF struct {
-	*assess.Person
-	*assess.Assessment
+	*phass.Person
+	*phass.Assessment
 	*skf.Skinfolds
 	*phass.EquationConf
 }
@@ -40,9 +39,9 @@ type BodyCompositionSKF struct {
 // FactoryBodyCompositionSKF factory to create new body composition assesment by
 // skilfolds methods. It returns a function to create new BodyCompositionSKF
 // structs.
-func FactoryBodyCompositionSKF(conf SKFEquationConf) func(*assess.Person, *assess.Assessment, *skf.Skinfolds) *BodyCompositionSKF {
+func FactoryBodyCompositionSKF(conf SKFEquationConf) func(*phass.Person, *phass.Assessment, *skf.Skinfolds) *BodyCompositionSKF {
 	c := NewEquationConfForSKF(conf)
-	return func(p *assess.Person, a *assess.Assessment, s *skf.Skinfolds) *BodyCompositionSKF {
+	return func(p *phass.Person, a *phass.Assessment, s *skf.Skinfolds) *BodyCompositionSKF {
 		return NewBodyCompositionSKF(p, a, s, c)
 	}
 }
@@ -50,7 +49,7 @@ func FactoryBodyCompositionSKF(conf SKFEquationConf) func(*assess.Person, *asses
 // NewBodyCompositionSKF create a new body composition assessment. It receives
 // person, an assessment, skinfolds, and the equation to estimate body fat
 // percentange. Returns a pointer to BodyCompostionSKF.
-func NewBodyCompositionSKF(p *assess.Person, a *assess.Assessment, s *skf.Skinfolds, e *phass.EquationConf) *BodyCompositionSKF {
+func NewBodyCompositionSKF(p *phass.Person, a *phass.Assessment, s *skf.Skinfolds, e *phass.EquationConf) *BodyCompositionSKF {
 	return &BodyCompositionSKF{p, a, s, e}
 }
 
@@ -100,7 +99,7 @@ func (b *BodyCompositionSKF) equation() phass.Equationer {
 var (
 	confWomenSevenSKF = SKFEquationConf{
 		name:     "Women seven skinfold equation from Jackson, Pollock, Ward",
-		gender:   assess.Female,
+		gender:   phass.Female,
 		lowerAge: 18,
 		upperAge: 55,
 		skinfolds: []int{
@@ -121,7 +120,7 @@ var (
 	}
 	confWomenThreeSKF = SKFEquationConf{
 		name:     "Women three skinfold equation from Jackson, Pollock, Ward",
-		gender:   assess.Female,
+		gender:   phass.Female,
 		lowerAge: 18,
 		upperAge: 55,
 		skinfolds: []int{
@@ -138,7 +137,7 @@ var (
 	}
 	confWomenTwoSKF = SKFEquationConf{
 		name:     "Women two skinfold equation from Slaughter et al.",
-		gender:   assess.Female,
+		gender:   phass.Female,
 		lowerAge: 6,
 		upperAge: 17,
 		skinfolds: []int{
@@ -152,7 +151,7 @@ var (
 	}
 	confMenSevenSKF = SKFEquationConf{
 		name:     "Men seven skinfold equation from Jackson, Pollock",
-		gender:   assess.Male,
+		gender:   phass.Male,
 		lowerAge: 18,
 		upperAge: 61,
 		skinfolds: []int{
@@ -173,7 +172,7 @@ var (
 	}
 	confMenThreeSKF = SKFEquationConf{
 		name:     "Men three skinfold equation from Jackson, Pollock",
-		gender:   assess.Male,
+		gender:   phass.Male,
 		lowerAge: 18,
 		upperAge: 61,
 		skinfolds: []int{
@@ -190,7 +189,7 @@ var (
 	}
 	confMenTwoSKF = SKFEquationConf{
 		name:     "Men two skinfold equation from Slaughter et al.",
-		gender:   assess.Male,
+		gender:   phass.Male,
 		lowerAge: 6,
 		upperAge: 17,
 		skinfolds: []int{

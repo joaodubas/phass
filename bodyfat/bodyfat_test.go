@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"github.com/joaodubas/phass"
-	assess "github.com/joaodubas/phass/assessment"
 	skf "github.com/joaodubas/phass/skinfold"
 )
 
@@ -17,7 +16,7 @@ import (
 func TestBodyFatCompositionValidation(t *testing.T) {
 	newEquation := FactoryBodyCompositionSKF(SKFEquationConf{
 		name:     "Dummy Dubas Two SKF",
-		gender:   assess.Female,
+		gender:   phass.Female,
 		lowerAge: 18,
 		upperAge: 55,
 		skinfolds: []int{
@@ -308,16 +307,16 @@ func TestMaleTwoSkinfoldEquation(t *testing.T) {
  */
 
 type case_ struct {
-	person     *assess.Person
-	assessment *assess.Assessment
+	person     *phass.Person
+	assessment *phass.Assessment
 	skinfold   *skf.Skinfolds
 	name       string
 	calc       float64
 	err        string
 }
 
-func newCase_(p *assess.Person, d string, s map[int]float64, name string, calc float64, err string) case_ {
-	assessment, _ := assess.NewAssessment(d)
+func newCase_(p *phass.Person, d string, s map[int]float64, name string, calc float64, err string) case_ {
+	assessment, _ := phass.NewAssessment(d)
 	return case_{
 		person:     p,
 		assessment: assessment,
@@ -329,8 +328,8 @@ func newCase_(p *assess.Person, d string, s map[int]float64, name string, calc f
 }
 
 var (
-	male, _   = assess.NewPerson("Joao Paulo Dubas", "1978-Dec-15", assess.Male)
-	female, _ = assess.NewPerson("Ana Paula Dubas", "1988-Mar-15", assess.Female)
+	male, _   = phass.NewPerson("Joao Paulo Dubas", "1978-Dec-15", phass.Male)
+	female, _ = phass.NewPerson("Ana Paula Dubas", "1988-Mar-15", phass.Female)
 )
 
 func floatEqual(original, expected, limit float64) bool {
