@@ -1,25 +1,22 @@
-package circumference
+package phass
 
 import (
-	"math"
 	"testing"
-
-	"github.com/joaodubas/phass"
 )
 
 func TestWaistToHipCalcAndClassification(t *testing.T) {
-	male, err := phass.NewPerson("João Paulo Dubas", "1978-Dec-15", phass.Male)
+	male, err := NewPerson("João Paulo Dubas", "1978-Dec-15", Male)
 	if err != nil {
 		t.Errorf("Could not create a person: .", err)
 	}
 
-	female, err := phass.NewPerson("Ana Paula Dubas", "1988-Mar-08", phass.Female)
+	female, err := NewPerson("Ana Paula Dubas", "1988-Mar-08", Female)
 	if err != nil {
 		t.Errorf("Could not create a person: .", err)
 	}
 
 	type wthSpec struct {
-		person         *phass.Person
+		person         *Person
 		assessmentDate string
 		waist          float64
 		hip            float64
@@ -79,7 +76,7 @@ func TestWaistToHipCalcAndClassification(t *testing.T) {
 	cases := []wthCase{}
 
 	for _, spec := range specs {
-		assessment, err := phass.NewAssessment(spec.assessmentDate)
+		assessment, err := NewAssessment(spec.assessmentDate)
 		if err != nil {
 			t.Errorf("Could not create assessment: %s", err)
 		}
@@ -102,12 +99,12 @@ func TestWaistToHipCalcAndClassification(t *testing.T) {
 }
 
 func TestWaistToHipMissingMeasure(t *testing.T) {
-	p, err := phass.NewPerson("João Paulo Dubas", "1978-Dec-15", phass.Male)
+	p, err := NewPerson("João Paulo Dubas", "1978-Dec-15", Male)
 	if err != nil {
 		t.Errorf("Could not create person: %s", err)
 	}
 
-	a, err := phass.NewAssessment("2015-May-22")
+	a, err := NewAssessment("2015-May-22")
 	if err != nil {
 		t.Errorf("Could not create assessment: %s", err)
 	}
@@ -132,18 +129,18 @@ func TestWaistToHipMissingMeasure(t *testing.T) {
 }
 
 func TestWaistToHipOutsideAgeRange(t *testing.T) {
-	m, err := phass.NewPerson("João Paulo Dubas", "1978-Dec-15", phass.Male)
+	m, err := NewPerson("João Paulo Dubas", "1978-Dec-15", Male)
 	if err != nil {
 		t.Errorf("Could not create person: %s", err)
 	}
 
-	f, err := phass.NewPerson("Ana Paula Dubas", "1988-Mar-15", phass.Female)
+	f, err := NewPerson("Ana Paula Dubas", "1988-Mar-15", Female)
 	if err != nil {
 		t.Errorf("Could not create person: %s", err)
 	}
 
 	type wthSpec struct {
-		person     *phass.Person
+		person     *Person
 		assessment string
 		measures   map[int]float64
 	}
@@ -158,7 +155,7 @@ func TestWaistToHipOutsideAgeRange(t *testing.T) {
 
 	cases := []*WaistToHip{}
 	for _, spec := range specs {
-		a, err := phass.NewAssessment(spec.assessment)
+		a, err := NewAssessment(spec.assessment)
 		if err != nil {
 			t.Errorf("Could not create assessment: %s", err)
 		}
@@ -173,11 +170,6 @@ func TestWaistToHipOutsideAgeRange(t *testing.T) {
 			t.Error("WTH do not have classification due to age outside valid range")
 		}
 	}
-}
-
-func floatEqual(original, expected, limit float64) bool {
-	diff := math.Abs(original - expected)
-	return diff <= limit
 }
 
 var wthLimit = 0.001

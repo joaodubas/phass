@@ -1,10 +1,8 @@
-package circumference
+package phass
 
 import (
 	"fmt"
 	"math"
-
-	"github.com/joaodubas/phass"
 )
 
 /**
@@ -50,13 +48,13 @@ const (
 // ConicityIndex is an abdominal adiposity proxy, that adjusts waist
 // circumference by height and weight.
 type ConicityIndex struct {
-	*phass.Anthropometry
+	*Anthropometry
 	*Circumferences
 }
 
 // NewConicityIndex creates a new conicity index, based in anthropometry and
 // circumferences measures.
-func NewConicityIndex(anthropometry *phass.Anthropometry, measures map[int]float64) *ConicityIndex {
+func NewConicityIndex(anthropometry *Anthropometry, measures map[int]float64) *ConicityIndex {
 	return &ConicityIndex{anthropometry, NewCircumferences(measures)}
 }
 
@@ -93,8 +91,8 @@ func (c *ConicityIndex) Calc() (float64, error) {
 }
 
 // equation returns an equation, used to calculate conicity index.
-func (c *ConicityIndex) equation() phass.Equationer {
-	return phass.NewEquation(cidConf.Extract(c), cidConf)
+func (c *ConicityIndex) equation() Equationer {
+	return NewEquation(cidConf.Extract(c), cidConf)
 }
 
 /**
@@ -104,14 +102,14 @@ func (c *ConicityIndex) equation() phass.Equationer {
 // WaistToHip represents the waits-to-hip ratio, a proxy for abdominal
 // adiposity.
 type WaistToHip struct {
-	*phass.Person
-	*phass.Assessment
+	*Person
+	*Assessment
 	*Circumferences
 }
 
 // NewWaistToHipRatio creates a new pointer to waist-to-hip, based in person,
 // assessment and circumference measures.
-func NewWaistToHipRatio(person *phass.Person, assessment *phass.Assessment, measures map[int]float64) *WaistToHip {
+func NewWaistToHipRatio(person *Person, assessment *Assessment, measures map[int]float64) *WaistToHip {
 	return &WaistToHip{person, assessment, NewCircumferences(measures)}
 }
 
@@ -165,7 +163,7 @@ func (w *WaistToHip) Classify() (string, error) {
 		if age < limits[0] || age >= limits[1] {
 			continue
 		}
-		return phass.Classifier(v, classes, WTHClassification), nil
+		return Classifier(v, classes, WTHClassification), nil
 	}
 
 	return "", fmt.Errorf("No classification for age %.0f", age)
@@ -177,8 +175,8 @@ func (w *WaistToHip) Calc() (float64, error) {
 }
 
 // equation returns an equation, used to calculate waist-to-hip.
-func (w *WaistToHip) equation() phass.Equationer {
-	return phass.NewEquation(wthConf.Extract(w), wthConf)
+func (w *WaistToHip) equation() Equationer {
+	return NewEquation(wthConf.Extract(w), wthConf)
 }
 
 /**
@@ -235,9 +233,9 @@ func NamedCircumference(name int) string {
  */
 
 var (
-	wthConf = phass.NewEquationConf(
+	wthConf = NewEquationConf(
 		"Waist to Hip ratio",
-		func(i interface{}) phass.InParams {
+		func(i interface{}) InParams {
 			ci := i.(*WaistToHip)
 			return map[string]float64{
 				"age":                        ci.Person.AgeFromDate(ci.Assessment.Date),
@@ -246,19 +244,19 @@ var (
 				NamedCircumference(CCFHip):   ci.Circumferences.Measures[CCFHip],
 			}
 		},
-		[]phass.Validator{
-			phass.ValidateAge(20, 69),
-			phass.ValidateMeasures([]string{"age", "gender", NamedCircumference(CCFWaist), NamedCircumference(CCFHip)}),
+		[]Validator{
+			ValidateAge(20, 69),
+			ValidateMeasures([]string{"age", "gender", NamedCircumference(CCFWaist), NamedCircumference(CCFHip)}),
 		},
-		func(e *phass.Equation) float64 {
+		func(e *Equation) float64 {
 			w, _ := e.In(NamedCircumference(CCFWaist))
 			h, _ := e.In(NamedCircumference(CCFHip))
 			return w / h
 		},
 	)
-	cidConf = phass.NewEquationConf(
+	cidConf = NewEquationConf(
 		"Conicity index",
-		func(i interface{}) phass.InParams {
+		func(i interface{}) InParams {
 			ci := i.(*ConicityIndex)
 			rs := map[string]float64{
 				"weight": ci.Anthropometry.Weight,
@@ -269,10 +267,10 @@ var (
 			}
 			return rs
 		},
-		[]phass.Validator{
-			phass.ValidateMeasures([]string{"weight", "height", NamedCircumference(CCFWaist)}),
+		[]Validator{
+			ValidateMeasures([]string{"weight", "height", NamedCircumference(CCFWaist)}),
 		},
-		func(e *phass.Equation) float64 {
+		func(e *Equation) float64 {
 			w, _ := e.In("weight")
 			h, _ := e.In("height")
 			c, _ := e.In(NamedCircumference(CCFWaist))
@@ -304,7 +302,7 @@ var WTHClassification = map[int]string{
 // wthLimits represent the classification limits for any given gender, age, and
 // waist-to-hip ratio vlaue.
 var wthLimits = map[int]map[[2]float64]map[int][2]float64{
-	phass.Male: map[[2]float64]map[int][2]float64{
+	Male: map[[2]float64]map[int][2]float64{
 		[2]float64{20, 30}: map[int][2]float64{
 			WTHLow:      [2]float64{math.Inf(-1), 0.83},
 			WTHModerate: [2]float64{0.83, 0.89},
@@ -336,7 +334,7 @@ var wthLimits = map[int]map[[2]float64]map[int][2]float64{
 			WTHVeryHigh: [2]float64{1.03, math.Inf(+1)},
 		},
 	},
-	phass.Female: map[[2]float64]map[int][2]float64{
+	Female: map[[2]float64]map[int][2]float64{
 		[2]float64{20, 30}: map[int][2]float64{
 			WTHLow:      [2]float64{math.Inf(-1), 0.71},
 			WTHModerate: [2]float64{0.71, 0.78},
