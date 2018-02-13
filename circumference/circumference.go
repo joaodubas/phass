@@ -5,7 +5,6 @@ import (
 	"math"
 
 	"github.com/joaodubas/phass"
-	anthropo "github.com/joaodubas/phass/anthropometry"
 )
 
 /**
@@ -51,13 +50,13 @@ const (
 // ConicityIndex is an abdominal adiposity proxy, that adjusts waist
 // circumference by height and weight.
 type ConicityIndex struct {
-	*anthropo.Anthropometry
+	*phass.Anthropometry
 	*Circumferences
 }
 
 // NewConicityIndex creates a new conicity index, based in anthropometry and
 // circumferences measures.
-func NewConicityIndex(anthropometry *anthropo.Anthropometry, measures map[int]float64) *ConicityIndex {
+func NewConicityIndex(anthropometry *phass.Anthropometry, measures map[int]float64) *ConicityIndex {
 	return &ConicityIndex{anthropometry, NewCircumferences(measures)}
 }
 

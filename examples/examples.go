@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	"github.com/joaodubas/phass"
-	anthropo "github.com/joaodubas/phass/anthropometry"
 	bf "github.com/joaodubas/phass/bodyfat"
 	ccf "github.com/joaodubas/phass/circumference"
 	skf "github.com/joaodubas/phass/skinfold"
@@ -20,7 +19,7 @@ func main() {
 	handleError("Ops assessment not done:", err)
 
 	// add anthropometric
-	bmi := anthropo.NewBMIPrime(98.0, 168.0)
+	bmi := phass.NewBMIPrime(98.0, 168.0)
 	a.AddMeasure(bmi)
 
 	// add skinfold
