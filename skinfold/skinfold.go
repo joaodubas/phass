@@ -5,6 +5,17 @@ import "fmt"
 /**
  * Constants
  */
+
+// Skinfold constants.
+// SKFSubscapular: subscapular skinfold.
+// SKFTriceps: triceps skinfold.
+// SKFBiceps: biceps skinfold.
+// SKFChest: chest skinfold.
+// SKFMidaxillary: mid-axillary skinfold.
+// SKFSuprailiac: suprailiac skinfold.
+// SKFAbdominal: abdominal skinfold.
+// SKFThigh: thigh skinfold.
+// SKFCalf: calf skinfold.
 const (
 	SKFSubscapular = iota
 	SKFTriceps
@@ -35,10 +46,12 @@ func (s *Skinfolds) String() string {
 	return fmt.Sprintf("Sum %d skinfolds: %.2f mm", len(s.Measures), s.Sum())
 }
 
+// GetName returns name for this measurement.
 func (s *Skinfolds) GetName() string {
 	return "Skinfolds"
 }
 
+// Result returns relevant information about this measurement.
 func (s *Skinfolds) Result() ([]string, error) {
 	rs := []string{}
 	for k, v := range s.Measures {
@@ -66,7 +79,7 @@ func (s *Skinfolds) SumSpecific(skinfolds []int) float64 {
 	return accum
 }
 
-// NamedSkinfold give the name for a given skinfold constant.
+// NamedSkinfold returns the name for a given skinfold constant.
 func NamedSkinfold(name int) string {
 	named := map[int]string{
 		SKFSubscapular: "subscapular",
