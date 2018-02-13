@@ -1,4 +1,4 @@
-package assessment
+package phass
 
 import (
 	"fmt"

@@ -1,4 +1,4 @@
-package skinfold
+package phass
 
 import "fmt"
 

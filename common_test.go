@@ -1,4 +1,4 @@
-package common
+package phass
 
 import (
 	"fmt"
@@ -8,11 +8,11 @@ import (
 )
 
 func TestEquationValidation(t *testing.T) {
-	cases := []case_{
-		case_{in: map[string]float64{}, ok: false, err: "Missing measure"},
-		case_{in: map[string]float64{"age": 18.0}, ok: false, err: "Missing measure"},
-		case_{in: map[string]float64{"sskf": 112.1}, ok: false, err: "Missing measure"},
-		case_{in: map[string]float64{"age": 17.9, "sskf": 112.1}, ok: false, err: "Equation valid for age"},
+	cases := []caseCommon{
+		caseCommon{in: map[string]float64{}, ok: false, err: "Missing measure"},
+		caseCommon{in: map[string]float64{"age": 18.0}, ok: false, err: "Missing measure"},
+		caseCommon{in: map[string]float64{"sskf": 112.1}, ok: false, err: "Missing measure"},
+		caseCommon{in: map[string]float64{"age": 17.9, "sskf": 112.1}, ok: false, err: "Equation valid for age"},
 	}
 
 	for _, data := range cases {
@@ -64,18 +64,18 @@ func TestEquationRetrieveIn(t *testing.T) {
 }
 
 func TestAgeValidator(t *testing.T) {
-	cases := []case_{
-		case_{
+	cases := []caseCommon{
+		caseCommon{
 			in:  map[string]float64{},
 			ok:  false,
 			err: "Missing age",
 		},
-		case_{
+		caseCommon{
 			in:  map[string]float64{"age": 9},
 			ok:  false,
 			err: "Valid for ages",
 		},
-		case_{
+		caseCommon{
 			in:  map[string]float64{"age": 21},
 			ok:  false,
 			err: "Valid for ages",
@@ -101,7 +101,7 @@ func TestAgeValidator(t *testing.T) {
 }
 
 func TestMeasureValidator(t *testing.T) {
-	cases := []case_{}
+	cases := []caseCommon{}
 	validator := ValidateMeasures([]string{"age", "weight", "height"})
 	for _, data := range cases {
 		eq := NewEquation(data.in, conf).(*Equation)
@@ -113,7 +113,7 @@ func TestMeasureValidator(t *testing.T) {
 	}
 }
 
-type case_ struct {
+type caseCommon struct {
 	in  InParams
 	ok  bool
 	err string
