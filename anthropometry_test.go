@@ -1,7 +1,6 @@
-package anthropometry
+package phass
 
 import (
-	"math"
 	"testing"
 )
 
@@ -124,11 +123,6 @@ type case_ struct {
 	bmi      anthropo
 	calc     float64
 	classify string
-}
-
-func floatEqual(data, expected, limit float64) bool {
-	d := math.Abs(data - expected)
-	return d < limit
 }
 
 var FloatLimit = 0.0001

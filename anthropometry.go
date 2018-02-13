@@ -1,11 +1,9 @@
-package anthropometry
+package phass
 
 import (
 	"fmt"
 	"math"
 	"strings"
-
-	"github.com/joaodubas/phass"
 )
 
 /**
@@ -16,11 +14,11 @@ import (
 // classify a BMI Prime based on weight and height.
 var NewBMIPrime = newAnthropoRatio(
 	limitsForBMIPrime,
-	func(w, h float64) phass.Measurer {
+	func(w, h float64) Measurer {
 		return NewBMI(w, h)
 	},
 	bmiPrimeConf,
-	func(a phass.Measurer) []string {
+	func(a Measurer) []string {
 		i := a.(*AnthropometricRatio)
 		v, _ := i.Calc()
 		c, _ := i.Classify()
@@ -39,11 +37,11 @@ var NewBMIPrime = newAnthropoRatio(
 // a BMI based on weight and height.
 var NewBMI = newAnthropoRatio(
 	limitsForBMI,
-	func(w, h float64) phass.Measurer {
+	func(w, h float64) Measurer {
 		return NewAnthropometry(w, h)
 	},
 	bmiConf,
-	func(a phass.Measurer) []string {
+	func(a Measurer) []string {
 		i := a.(*AnthropometricRatio)
 		v, _ := i.Calc()
 		c, _ := i.Classify()
@@ -97,11 +95,11 @@ type AnthropometricRatio struct {
 	// lim represents the limits for a given classification value
 	lim map[int][2]float64
 	// prt is the parent measurement
-	prt phass.Measurer
+	prt Measurer
 	// conf defines the equation configuration for the given ratio
-	conf *phass.EquationConf
+	conf *EquationConf
 	// result knows how to represent the results for the given measurement
-	result func(phass.Measurer) []string
+	result func(Measurer) []string
 }
 
 // newAnthropometricRatio create a anthropometric ratio, that is comprised of a
@@ -110,9 +108,9 @@ type AnthropometricRatio struct {
 // Returns a function that create a new AnthropoRatio instance.
 func newAnthropoRatio(
 	lim map[int][2]float64,
-	prt func(float64, float64) phass.Measurer,
-	conf *phass.EquationConf,
-	result func(phass.Measurer) []string,
+	prt func(float64, float64) Measurer,
+	conf *EquationConf,
+	result func(Measurer) []string,
 ) func(float64, float64) *AnthropometricRatio {
 	ai := new(AnthropometricRatio)
 	ai.lim = lim
@@ -166,7 +164,7 @@ func (i *AnthropometricRatio) Classify() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return phass.Classifier(v, i.lim, BMIClassification), nil
+	return Classifier(v, i.lim, BMIClassification), nil
 }
 
 // Calc returns the measurement value, and an optional error.
@@ -176,8 +174,8 @@ func (i *AnthropometricRatio) Calc() (float64, error) {
 
 // equation returns the Equation instance used to validate and calculate the
 // measurement value.
-func (i *AnthropometricRatio) equation() phass.Equationer {
-	return phass.NewEquation(i.conf.Extract(i.Anthropometry), i.conf)
+func (i *AnthropometricRatio) equation() Equationer {
+	return NewEquation(i.conf.Extract(i.Anthropometry), i.conf)
 }
 
 /**
@@ -186,33 +184,33 @@ func (i *AnthropometricRatio) equation() phass.Equationer {
 
 // Equations for calculation of body mass index and body mass index prime.
 var (
-	bmiConf = phass.NewEquationConf(
+	bmiConf = NewEquationConf(
 		"BMI",
 		inParams,
 		validators,
-		func(e *phass.Equation) float64 {
+		func(e *Equation) float64 {
 			w, _ := e.In("weight")
 			h, _ := e.In("height")
 			return w / math.Pow(h/100, 2)
 		},
 	)
-	bmiPrimeConf = phass.NewEquationConf(
+	bmiPrimeConf = NewEquationConf(
 		"BMIPrime",
 		inParams,
 		validators,
-		func(e *phass.Equation) float64 {
+		func(e *Equation) float64 {
 			return bmiConf.Calc(e) / 25.0
 		},
 	)
 )
 
 // List of validators for weight and height measures.
-var validators = []phass.Validator{phass.ValidateMeasures([]string{"weight", "height"})}
+var validators = []Validator{ValidateMeasures([]string{"weight", "height"})}
 
 // inParams method define base parameters for anthropometry. It receives an
 // interface, that must comply with Anthropometry struct and returns a map
 // with weight and height values.
-func inParams(i interface{}) phass.InParams {
+func inParams(i interface{}) InParams {
 	ci := i.(*Anthropometry)
 	return map[string]float64{
 		"weight": ci.Weight,
