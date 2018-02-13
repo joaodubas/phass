@@ -5,7 +5,6 @@ import (
 	"math"
 
 	"github.com/joaodubas/phass"
-	skf "github.com/joaodubas/phass/skinfold"
 )
 
 /**
@@ -32,16 +31,16 @@ var (
 type BodyCompositionSKF struct {
 	*phass.Person
 	*phass.Assessment
-	*skf.Skinfolds
+	*phass.Skinfolds
 	*phass.EquationConf
 }
 
 // FactoryBodyCompositionSKF factory to create new body composition assesment by
 // skilfolds methods. It returns a function to create new BodyCompositionSKF
 // structs.
-func FactoryBodyCompositionSKF(conf SKFEquationConf) func(*phass.Person, *phass.Assessment, *skf.Skinfolds) *BodyCompositionSKF {
+func FactoryBodyCompositionSKF(conf SKFEquationConf) func(*phass.Person, *phass.Assessment, *phass.Skinfolds) *BodyCompositionSKF {
 	c := NewEquationConfForSKF(conf)
-	return func(p *phass.Person, a *phass.Assessment, s *skf.Skinfolds) *BodyCompositionSKF {
+	return func(p *phass.Person, a *phass.Assessment, s *phass.Skinfolds) *BodyCompositionSKF {
 		return NewBodyCompositionSKF(p, a, s, c)
 	}
 }
@@ -49,7 +48,7 @@ func FactoryBodyCompositionSKF(conf SKFEquationConf) func(*phass.Person, *phass.
 // NewBodyCompositionSKF create a new body composition assessment. It receives
 // person, an assessment, skinfolds, and the equation to estimate body fat
 // percentange. Returns a pointer to BodyCompostionSKF.
-func NewBodyCompositionSKF(p *phass.Person, a *phass.Assessment, s *skf.Skinfolds, e *phass.EquationConf) *BodyCompositionSKF {
+func NewBodyCompositionSKF(p *phass.Person, a *phass.Assessment, s *phass.Skinfolds, e *phass.EquationConf) *BodyCompositionSKF {
 	return &BodyCompositionSKF{p, a, s, e}
 }
 
@@ -103,13 +102,13 @@ var (
 		lowerAge: 18,
 		upperAge: 55,
 		skinfolds: []int{
-			skf.SKFSubscapular,
-			skf.SKFTriceps,
-			skf.SKFChest,
-			skf.SKFMidaxillary,
-			skf.SKFSuprailiac,
-			skf.SKFAbdominal,
-			skf.SKFThigh,
+			phass.SKFSubscapular,
+			phass.SKFTriceps,
+			phass.SKFChest,
+			phass.SKFMidaxillary,
+			phass.SKFSuprailiac,
+			phass.SKFAbdominal,
+			phass.SKFThigh,
 		},
 		equation: func(e *phass.Equation) float64 {
 			age, _ := e.In("age")
@@ -124,9 +123,9 @@ var (
 		lowerAge: 18,
 		upperAge: 55,
 		skinfolds: []int{
-			skf.SKFTriceps,
-			skf.SKFSuprailiac,
-			skf.SKFThigh,
+			phass.SKFTriceps,
+			phass.SKFSuprailiac,
+			phass.SKFThigh,
 		},
 		equation: func(e *phass.Equation) float64 {
 			age, _ := e.In("age")
@@ -141,8 +140,8 @@ var (
 		lowerAge: 6,
 		upperAge: 17,
 		skinfolds: []int{
-			skf.SKFTriceps,
-			skf.SKFCalf,
+			phass.SKFTriceps,
+			phass.SKFCalf,
 		},
 		equation: func(e *phass.Equation) float64 {
 			sskf, _ := e.In("sskf")
@@ -155,13 +154,13 @@ var (
 		lowerAge: 18,
 		upperAge: 61,
 		skinfolds: []int{
-			skf.SKFSubscapular,
-			skf.SKFTriceps,
-			skf.SKFChest,
-			skf.SKFMidaxillary,
-			skf.SKFSuprailiac,
-			skf.SKFAbdominal,
-			skf.SKFThigh,
+			phass.SKFSubscapular,
+			phass.SKFTriceps,
+			phass.SKFChest,
+			phass.SKFMidaxillary,
+			phass.SKFSuprailiac,
+			phass.SKFAbdominal,
+			phass.SKFThigh,
 		},
 		equation: func(e *phass.Equation) float64 {
 			age, _ := e.In("age")
@@ -176,9 +175,9 @@ var (
 		lowerAge: 18,
 		upperAge: 61,
 		skinfolds: []int{
-			skf.SKFChest,
-			skf.SKFAbdominal,
-			skf.SKFThigh,
+			phass.SKFChest,
+			phass.SKFAbdominal,
+			phass.SKFThigh,
 		},
 		equation: func(e *phass.Equation) float64 {
 			age, _ := e.In("age")
@@ -193,8 +192,8 @@ var (
 		lowerAge: 6,
 		upperAge: 17,
 		skinfolds: []int{
-			skf.SKFTriceps,
-			skf.SKFCalf,
+			phass.SKFTriceps,
+			phass.SKFCalf,
 		},
 		equation: func(e *phass.Equation) float64 {
 			sskf, _ := e.In("sskf")
@@ -219,7 +218,7 @@ func NewEquationConfForSKF(conf SKFEquationConf) *phass.EquationConf {
 		}
 		for _, s := range conf.skinfolds {
 			if v, ok := c.Skinfolds.Measures[s]; ok {
-				r[skf.NamedSkinfold(s)] = v
+				r[phass.NamedSkinfold(s)] = v
 			}
 		}
 		return r
@@ -246,8 +245,8 @@ type SKFEquationConf struct {
 func validateSkinfolds(skfs []int) phass.Validator {
 	return func(e *phass.Equation) (bool, error) {
 		for _, k := range skfs {
-			if _, ok := e.In(skf.NamedSkinfold(k)); !ok {
-				return false, fmt.Errorf("Missing skinfold %s", skf.NamedSkinfold(k))
+			if _, ok := e.In(phass.NamedSkinfold(k)); !ok {
+				return false, fmt.Errorf("Missing skinfold %s", phass.NamedSkinfold(k))
 			}
 		}
 		return true, nil

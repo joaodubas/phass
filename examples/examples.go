@@ -7,7 +7,6 @@ import (
 
 	"github.com/joaodubas/phass"
 	bf "github.com/joaodubas/phass/bodyfat"
-	skf "github.com/joaodubas/phass/skinfold"
 )
 
 func main() {
@@ -22,14 +21,14 @@ func main() {
 	a.AddMeasure(bmi)
 
 	// add skinfold
-	skfs := skf.NewSkinfolds(map[int]float64{
-		skf.SKFChest:       5.0,
-		skf.SKFAbdominal:   10.0,
-		skf.SKFThigh:       15.0,
-		skf.SKFTriceps:     20.0,
-		skf.SKFMidaxillary: 25.0,
-		skf.SKFSubscapular: 30.0,
-		skf.SKFSuprailiac:  35.0,
+	skfs := phass.NewSkinfolds(map[int]float64{
+		phass.SKFChest:       5.0,
+		phass.SKFAbdominal:   10.0,
+		phass.SKFThigh:       15.0,
+		phass.SKFTriceps:     20.0,
+		phass.SKFMidaxillary: 25.0,
+		phass.SKFSubscapular: 30.0,
+		phass.SKFSuprailiac:  35.0,
 	})
 	a.AddMeasure(skfs)
 
