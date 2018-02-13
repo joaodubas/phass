@@ -7,7 +7,6 @@ import (
 
 	"github.com/joaodubas/phass"
 	bf "github.com/joaodubas/phass/bodyfat"
-	ccf "github.com/joaodubas/phass/circumference"
 	skf "github.com/joaodubas/phass/skinfold"
 )
 
@@ -38,17 +37,17 @@ func main() {
 	a.AddMeasure(bf.NewMenSevenSKF(p, a, skfs))
 
 	// add circunferences
-	ccfs := ccf.NewCircumferences(map[int]float64{
-		ccf.CCFWaist: 98.2,
-		ccf.CCFHip:   104.1,
+	ccfs := phass.NewCircumferences(map[int]float64{
+		phass.CCFWaist: 98.2,
+		phass.CCFHip:   104.1,
 	})
 	a.AddMeasure(ccfs)
 
 	// add waist-to-hip
-	a.AddMeasure(ccf.NewWaistToHipRatio(p, a, ccfs.Measures))
+	a.AddMeasure(phass.NewWaistToHipRatio(p, a, ccfs.Measures))
 
 	// add conicity index
-	a.AddMeasure(ccf.NewConicityIndex(bmi.Anthropometry, ccfs.Measures))
+	a.AddMeasure(phass.NewConicityIndex(bmi.Anthropometry, ccfs.Measures))
 
 	// show result
 	rs, err := a.Result()
