@@ -28,13 +28,13 @@ func TestPersonAge(t *testing.T) {
 		t.Errorf("Received err creating person %s", err)
 	}
 
-	cases := []case_{
-		case_{
+	cases := []caseAssessment{
+		caseAssessment{
 			person:      older,
 			age:         34.5,
 			ageInMonths: 414.0,
 		},
-		case_{
+		caseAssessment{
 			person:      newer,
 			age:         25.27,
 			ageInMonths: 303.24,
@@ -64,7 +64,7 @@ func TestAssessmentDate(t *testing.T) {
 
 var refDate, _ = time.Parse(TimeLayout, "2013-Jun-15")
 
-type case_ struct {
+type caseAssessment struct {
 	person      *Person
 	age         float64
 	ageInMonths float64
