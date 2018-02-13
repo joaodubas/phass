@@ -2,16 +2,32 @@ package circumference
 
 import (
 	"fmt"
+	"math"
+
 	anthropo "github.com/joaodubas/phass/anthropometry"
 	assess "github.com/joaodubas/phass/assessment"
 	"github.com/joaodubas/phass/common"
-	"math"
 )
 
 /**
  * Constants
  */
 
+// Circuferences constants.
+// CCFNeck: neck circumference
+// CCFShoulder: sholder circumference
+// CCFChest: chest circumference
+// CCFWaist: wait circumference
+// CCFAbdominal: abdominal circumference
+// CCFHip: hip circumference
+// CCFRightArm: right arm circumference
+// CCFRightForeArm: right forearm circumference
+// CCFRightThigh: right thigh circumference
+// CCFRightCalf: right calf circumference
+// CCFLeftArm: left arm circumference
+// CCFLeftForeArm: left forearm circumference
+// CCFLeftThigh: left thigh circumference
+// CCFLeftCalf: left calf circumference
 const (
 	CCFNeck int = iota
 	CCFShoulder
@@ -33,11 +49,15 @@ const (
  * Conicity index
  */
 
+// ConicityIndex is an abdominal adiposity proxy, that adjusts waist
+// circumference by height and weight.
 type ConicityIndex struct {
 	*anthropo.Anthropometry
 	*Circumferences
 }
 
+// NewConicityIndex creates a new conicity index, based in anthropometry and
+// circumferences measures.
 func NewConicityIndex(anthropometry *anthropo.Anthropometry, measures map[int]float64) *ConicityIndex {
 	return &ConicityIndex{anthropometry, NewCircumferences(measures)}
 }
@@ -47,10 +67,12 @@ func (c *ConicityIndex) String() string {
 	return fmt.Sprintf("%s\nConicity index: %.4f", c.Anthropometry.String(), v)
 }
 
+// GetName returns this measurement name.
 func (c *ConicityIndex) GetName() string {
 	return "Conicity index"
 }
 
+// Result returns relevant information about this measurement.
 func (c *ConicityIndex) Result() ([]string, error) {
 	v, err := c.Calc()
 	if err != nil {
@@ -59,6 +81,7 @@ func (c *ConicityIndex) Result() ([]string, error) {
 	return []string{fmt.Sprintf("Conicity index: %.4f.", v)}, nil
 }
 
+// Classify returns the classification for this measurement.
 func (c *ConicityIndex) Classify() (string, error) {
 	if _, err := c.Calc(); err != nil {
 		return "", err
@@ -66,10 +89,12 @@ func (c *ConicityIndex) Classify() (string, error) {
 	return "No classification available yet", nil
 }
 
+// Calc returns the value for this measurement.
 func (c *ConicityIndex) Calc() (float64, error) {
 	return c.equation().Calc()
 }
 
+// equation returns an equation, used to calculate conicity index.
 func (c *ConicityIndex) equation() common.Equationer {
 	return common.NewEquation(cidConf.Extract(c), cidConf)
 }
@@ -78,12 +103,16 @@ func (c *ConicityIndex) equation() common.Equationer {
  * Waist-to-hip ratio
  */
 
+// WaistToHip represents the waits-to-hip ratio, a proxy for abdominal
+// adiposity.
 type WaistToHip struct {
 	*assess.Person
 	*assess.Assessment
 	*Circumferences
 }
 
+// NewWaistToHipRatio creates a new pointer to waist-to-hip, based in person,
+// assessment and circumference measures.
 func NewWaistToHipRatio(person *assess.Person, assessment *assess.Assessment, measures map[int]float64) *WaistToHip {
 	return &WaistToHip{person, assessment, NewCircumferences(measures)}
 }
@@ -94,10 +123,12 @@ func (w *WaistToHip) String() string {
 	return fmt.Sprintf("%s\nWTH: %.2f (%s)", w.Person.String(), v, c)
 }
 
+// GetName returns this measurement name.
 func (w *WaistToHip) GetName() string {
 	return "Waist-to-Hip ratio"
 }
 
+// Result returns relevant information about waist-to-hip assessment.
 func (w *WaistToHip) Result() ([]string, error) {
 	rs := []string{}
 
@@ -119,6 +150,7 @@ func (w *WaistToHip) Result() ([]string, error) {
 	return rs, nil
 }
 
+// Classify returns the classification for this assessment.
 func (w *WaistToHip) Classify() (string, error) {
 	v, err := w.Calc()
 	if err != nil {
@@ -141,10 +173,12 @@ func (w *WaistToHip) Classify() (string, error) {
 	return "", fmt.Errorf("No classification for age %.0f", age)
 }
 
+// Calc returns value for this waist-to-hip assessment.
 func (w *WaistToHip) Calc() (float64, error) {
 	return w.equation().Calc()
 }
 
+// equation returns an equation, used to calculate waist-to-hip.
 func (w *WaistToHip) equation() common.Equationer {
 	return common.NewEquation(wthConf.Extract(w), wthConf)
 }
@@ -158,7 +192,7 @@ type Circumferences struct {
 	Measures map[int]float64
 }
 
-// NewCircumference returns a new Circumferences instance.
+// NewCircumferences returns a new Circumferences instance.
 func NewCircumferences(measures map[int]float64) *Circumferences {
 	return &Circumferences{Measures: measures}
 }
@@ -177,6 +211,7 @@ func (c *Circumferences) Result() ([]string, error) {
 	return rs, nil
 }
 
+// NamedCircumference returns the name for a given circumference constant.
 func NamedCircumference(name int) string {
 	named := map[int]string{
 		CCFNeck:         "neck",
@@ -252,6 +287,7 @@ var (
  * Classification
  */
 
+// Waist-to-hip classification constants.
 const (
 	WTHLow = iota
 	WTHModerate
@@ -259,6 +295,7 @@ const (
 	WTHVeryHigh
 )
 
+// WTHClassification map between constant and string.
 var WTHClassification = map[int]string{
 	WTHLow:      "Low",
 	WTHModerate: "Moderate",

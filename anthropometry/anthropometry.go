@@ -2,10 +2,11 @@ package anthropometry
 
 import (
 	"fmt"
-	assess "github.com/joaodubas/phass/assessment"
-	"github.com/joaodubas/phass/common"
 	"math"
 	"strings"
+
+	assess "github.com/joaodubas/phass/assessment"
+	"github.com/joaodubas/phass/common"
 )
 
 /**
@@ -73,10 +74,12 @@ func (a *Anthropometry) String() string {
 	return fmt.Sprintf("Weight: %.2f kg\nHeight: %.2f cm", a.Weight, a.Height)
 }
 
+// GetName return this measurement name.
 func (a *Anthropometry) GetName() string {
 	return "Anthropometry"
 }
 
+// Result get common representation for this measurement.
 func (a *Anthropometry) Result() ([]string, error) {
 	return []string{
 		fmt.Sprintf("Weight: %.2f kg.", a.Weight),
@@ -88,7 +91,7 @@ func (a *Anthropometry) Result() ([]string, error) {
  * Anthropometric index
  */
 
-// AnthropmetricRatio represents a given anthropometric ratio. It's main
+// AnthropometricRatio represents a given anthropometric ratio. It's main
 // responsability is to implement Measurer interface for any ratio.
 type AnthropometricRatio struct {
 	*Anthropometry
@@ -102,9 +105,16 @@ type AnthropometricRatio struct {
 	result func(assess.Measurer) []string
 }
 
-// newAnthropometricRatio returns a function that create a new anthropoRatio
-// instance.
-func newAnthropoRatio(lim map[int][2]float64, prt func(float64, float64) assess.Measurer, conf *common.EquationConf, result func(assess.Measurer) []string) func(float64, float64) *AnthropometricRatio {
+// newAnthropometricRatio create a anthropometric ratio, that is comprised of a
+// limit mapper for classification, a parent measumerement function, an
+// enquation configuration, and a result function.
+// Returns a function that create a new AnthropoRatio instance.
+func newAnthropoRatio(
+	lim map[int][2]float64,
+	prt func(float64, float64) assess.Measurer,
+	conf *common.EquationConf,
+	result func(assess.Measurer) []string,
+) func(float64, float64) *AnthropometricRatio {
 	ai := new(AnthropometricRatio)
 	ai.lim = lim
 	ai.conf = conf
@@ -175,6 +185,7 @@ func (i *AnthropometricRatio) equation() common.Equationer {
  * Equations
  */
 
+// Equations for calculation of body mass index and body mass index prime.
 var (
 	bmiConf = common.NewEquationConf(
 		"BMI",
@@ -196,8 +207,12 @@ var (
 	)
 )
 
+// List of validators for weight and height measures.
 var validators = []common.Validator{common.ValidateMeasures([]string{"weight", "height"})}
 
+// inParams method define base parameters for anthropometry. It receives an
+// interface, that must comply with Anthropometry struct and returns a map
+// with weight and height values.
 func inParams(i interface{}) common.InParams {
 	ci := i.(*Anthropometry)
 	return map[string]float64{
@@ -210,6 +225,7 @@ func inParams(i interface{}) common.InParams {
  * Classification
  */
 
+// Classification constants for BMI and BMIPrime
 const (
 	VerySeverelyUnderweight = iota
 	SeverelyUnderweight
@@ -221,6 +237,7 @@ const (
 	ObeseClassThree
 )
 
+// BMIClassification map classification constants to their string representation.
 var BMIClassification = map[int]string{
 	VerySeverelyUnderweight: "Very severely underweight",
 	SeverelyUnderweight:     "Severely underweight",
@@ -232,6 +249,7 @@ var BMIClassification = map[int]string{
 	ObeseClassThree:         "Obese class three",
 }
 
+// Mappers defining limits for each classification constant.
 var (
 	limitsForBMI = map[int][2]float64{
 		VerySeverelyUnderweight: [2]float64{math.Inf(-1), 15},
