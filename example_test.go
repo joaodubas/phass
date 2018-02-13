@@ -1,4 +1,4 @@
-package main
+package phass_test
 
 import (
 	"fmt"
@@ -8,7 +8,7 @@ import (
 	"github.com/joaodubas/phass"
 )
 
-func main() {
+func Example() {
 	p, err := phass.NewPerson("João Paulo Dubas", "1978-Dec-15", phass.Male)
 	handleError("Ops person was not born:", err)
 
