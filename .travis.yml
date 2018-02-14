@@ -28,5 +28,8 @@ script:
   - gocyclo -over 19 $GO_FILES        # forbid code with huge functions
   - golint -set_exit_status ./...     # One last linter
   # Run all tests
-  - go test -v -covermode=count -coverprofile=profile.cov ./...
-  - goveralls -coverprofile=profile.cov -service=travis-ci
+  - go test -v -covermode=count -coverprofile=coverage.txt ./...
+  - goveralls -coverprofile=coverage.txt -service=travis-ci
+after_sucess:
+  # Upload coverage to codecov.io
+  - bash <(curl -s https://codecov.io/bash)
