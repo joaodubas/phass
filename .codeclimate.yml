@@ -1,0 +1,8 @@
+---
+plugins:
+  gofmt:
+    enable: true
+  golint:
+    enable: true
+  govet:
+    enable: true
