@@ -249,23 +249,23 @@ var BMIClassification = map[int]string{
 // Mappers defining limits for each classification constant.
 var (
 	limitsForBMI = map[int][2]float64{
-		VerySeverelyUnderweight: [2]float64{math.Inf(-1), 15},
-		SeverelyUnderweight:     [2]float64{15, 16},
-		Underweight:             [2]float64{16, 18.5},
-		Normal:                  [2]float64{18.5, 25},
-		Overweight:              [2]float64{25, 30},
-		ObeseClassOne:           [2]float64{30, 35},
-		ObeseClassTwo:           [2]float64{35, 40},
-		ObeseClassThree:         [2]float64{40, math.Inf(+1)},
+		VerySeverelyUnderweight: {math.Inf(-1), 15},
+		SeverelyUnderweight:     {15, 16},
+		Underweight:             {16, 18.5},
+		Normal:                  {18.5, 25},
+		Overweight:              {25, 30},
+		ObeseClassOne:           {30, 35},
+		ObeseClassTwo:           {35, 40},
+		ObeseClassThree:         {40, math.Inf(+1)},
 	}
 	limitsForBMIPrime = map[int][2]float64{
-		VerySeverelyUnderweight: [2]float64{math.Inf(-1), 0.60},
-		SeverelyUnderweight:     [2]float64{0.60, 0.64},
-		Underweight:             [2]float64{0.64, 0.74},
-		Normal:                  [2]float64{0.74, 1},
-		Overweight:              [2]float64{1, 1.2},
-		ObeseClassOne:           [2]float64{1.2, 1.4},
-		ObeseClassTwo:           [2]float64{1.4, 1.6},
-		ObeseClassThree:         [2]float64{1.6, math.Inf(+1)},
+		VerySeverelyUnderweight: {math.Inf(-1), 0.60},
+		SeverelyUnderweight:     {0.60, 0.64},
+		Underweight:             {0.64, 0.74},
+		Normal:                  {0.74, 1},
+		Overweight:              {1, 1.2},
+		ObeseClassOne:           {1.2, 1.4},
+		ObeseClassTwo:           {1.4, 1.6},
+		ObeseClassThree:         {1.6, math.Inf(+1)},
 	}
 )

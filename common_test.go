@@ -9,10 +9,10 @@ import (
 
 func TestEquationValidation(t *testing.T) {
 	cases := []caseCommon{
-		caseCommon{in: map[string]float64{}, ok: false, err: "Missing measure"},
-		caseCommon{in: map[string]float64{"age": 18.0}, ok: false, err: "Missing measure"},
-		caseCommon{in: map[string]float64{"sskf": 112.1}, ok: false, err: "Missing measure"},
-		caseCommon{in: map[string]float64{"age": 17.9, "sskf": 112.1}, ok: false, err: "Equation valid for age"},
+		{in: map[string]float64{}, ok: false, err: "Missing measure"},
+		{in: map[string]float64{"age": 18.0}, ok: false, err: "Missing measure"},
+		{in: map[string]float64{"sskf": 112.1}, ok: false, err: "Missing measure"},
+		{in: map[string]float64{"age": 17.9, "sskf": 112.1}, ok: false, err: "Equation valid for age"},
 	}
 
 	for _, data := range cases {
@@ -65,17 +65,17 @@ func TestEquationRetrieveIn(t *testing.T) {
 
 func TestAgeValidator(t *testing.T) {
 	cases := []caseCommon{
-		caseCommon{
+		{
 			in:  map[string]float64{},
 			ok:  false,
 			err: "Missing age",
 		},
-		caseCommon{
+		{
 			in:  map[string]float64{"age": 9},
 			ok:  false,
 			err: "Valid for ages",
 		},
-		caseCommon{
+		{
 			in:  map[string]float64{"age": 21},
 			ok:  false,
 			err: "Valid for ages",
