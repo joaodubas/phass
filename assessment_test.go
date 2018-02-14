@@ -29,12 +29,12 @@ func TestPersonAge(t *testing.T) {
 	}
 
 	cases := []caseAssessment{
-		caseAssessment{
+		{
 			person:      older,
 			age:         34.5,
 			ageInMonths: 414.0,
 		},
-		caseAssessment{
+		{
 			person:      newer,
 			age:         25.27,
 			ageInMonths: 303.24,

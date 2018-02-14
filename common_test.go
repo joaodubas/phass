@@ -9,10 +9,10 @@ import (
 
 func TestEquationValidation(t *testing.T) {
 	cases := []caseCommon{
-		caseCommon{in: map[string]float64{}, ok: false, err: "Missing measure"},
-		caseCommon{in: map[string]float64{"age": 18.0}, ok: false, err: "Missing measure"},
-		caseCommon{in: map[string]float64{"sskf": 112.1}, ok: false, err: "Missing measure"},
-		caseCommon{in: map[string]float64{"age": 17.9, "sskf": 112.1}, ok: false, err: "Equation valid for age"},
+		{in: map[string]float64{}, ok: false, err: "Missing measure"},
+		{in: map[string]float64{"age": 18.0}, ok: false, err: "Missing measure"},
+		{in: map[string]float64{"sskf": 112.1}, ok: false, err: "Missing measure"},
+		{in: map[string]float64{"age": 17.9, "sskf": 112.1}, ok: false, err: "Equation valid for age"},
 	}
 
 	for _, data := range cases {
@@ -32,10 +32,10 @@ func TestEquationValidation(t *testing.T) {
 
 	eq := NewEquation(map[string]float64{"age": 20, "sskf": 109.2}, conf)
 	if v, err := eq.Validate(); !v {
-		t.Error("Should be valid, instead get: %s", err)
+		t.Errorf("Should be valid, instead get: %s", err)
 	}
 	if v, err := eq.Calc(); v <= 0.0 && err != nil {
-		t.Error("Should get value greater that 0, instead get error %s", err)
+		t.Errorf("Should get value greater that 0, instead get error %s", err)
 	}
 
 }
@@ -65,17 +65,17 @@ func TestEquationRetrieveIn(t *testing.T) {
 
 func TestAgeValidator(t *testing.T) {
 	cases := []caseCommon{
-		caseCommon{
+		{
 			in:  map[string]float64{},
 			ok:  false,
 			err: "Missing age",
 		},
-		caseCommon{
+		{
 			in:  map[string]float64{"age": 9},
 			ok:  false,
 			err: "Valid for ages",
 		},
-		caseCommon{
+		{
 			in:  map[string]float64{"age": 21},
 			ok:  false,
 			err: "Valid for ages",
@@ -137,7 +137,7 @@ var conf = NewEquationConf(
 		func(e *Equation) (bool, error) {
 			v, ok := e.In("age")
 			if !ok {
-				return false, fmt.Errorf("Missing measure age.")
+				return false, fmt.Errorf("Missing measure age")
 			}
 
 			lower, upper := 18.0, 64.0

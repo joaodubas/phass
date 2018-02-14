@@ -302,68 +302,68 @@ var WTHClassification = map[int]string{
 // wthLimits represent the classification limits for any given gender, age, and
 // waist-to-hip ratio vlaue.
 var wthLimits = map[int]map[[2]float64]map[int][2]float64{
-	Male: map[[2]float64]map[int][2]float64{
-		[2]float64{20, 30}: map[int][2]float64{
-			WTHLow:      [2]float64{math.Inf(-1), 0.83},
-			WTHModerate: [2]float64{0.83, 0.89},
-			WTHHigh:     [2]float64{0.89, 0.94},
-			WTHVeryHigh: [2]float64{0.94, math.Inf(+1)},
+	Male: {
+		{20, 30}: {
+			WTHLow:      {math.Inf(-1), 0.83},
+			WTHModerate: {0.83, 0.89},
+			WTHHigh:     {0.89, 0.94},
+			WTHVeryHigh: {0.94, math.Inf(+1)},
 		},
-		[2]float64{30, 40}: map[int][2]float64{
-			WTHLow:      [2]float64{math.Inf(-1), 0.84},
-			WTHModerate: [2]float64{0.84, 0.92},
-			WTHHigh:     [2]float64{0.92, 0.96},
-			WTHVeryHigh: [2]float64{0.96, math.Inf(+1)},
+		{30, 40}: {
+			WTHLow:      {math.Inf(-1), 0.84},
+			WTHModerate: {0.84, 0.92},
+			WTHHigh:     {0.92, 0.96},
+			WTHVeryHigh: {0.96, math.Inf(+1)},
 		},
-		[2]float64{40, 50}: map[int][2]float64{
-			WTHLow:      [2]float64{math.Inf(-1), 0.88},
-			WTHModerate: [2]float64{0.88, 0.96},
-			WTHHigh:     [2]float64{0.96, 1.00},
-			WTHVeryHigh: [2]float64{1.00, math.Inf(+1)},
+		{40, 50}: {
+			WTHLow:      {math.Inf(-1), 0.88},
+			WTHModerate: {0.88, 0.96},
+			WTHHigh:     {0.96, 1.00},
+			WTHVeryHigh: {1.00, math.Inf(+1)},
 		},
-		[2]float64{50, 60}: map[int][2]float64{
-			WTHLow:      [2]float64{math.Inf(-1), 0.90},
-			WTHModerate: [2]float64{0.90, 0.97},
-			WTHHigh:     [2]float64{0.97, 1.02},
-			WTHVeryHigh: [2]float64{1.02, math.Inf(+1)},
+		{50, 60}: {
+			WTHLow:      {math.Inf(-1), 0.90},
+			WTHModerate: {0.90, 0.97},
+			WTHHigh:     {0.97, 1.02},
+			WTHVeryHigh: {1.02, math.Inf(+1)},
 		},
-		[2]float64{60, 70}: map[int][2]float64{
-			WTHLow:      [2]float64{math.Inf(-1), 0.91},
-			WTHModerate: [2]float64{0.91, 0.99},
-			WTHHigh:     [2]float64{0.99, 1.03},
-			WTHVeryHigh: [2]float64{1.03, math.Inf(+1)},
+		{60, 70}: {
+			WTHLow:      {math.Inf(-1), 0.91},
+			WTHModerate: {0.91, 0.99},
+			WTHHigh:     {0.99, 1.03},
+			WTHVeryHigh: {1.03, math.Inf(+1)},
 		},
 	},
-	Female: map[[2]float64]map[int][2]float64{
-		[2]float64{20, 30}: map[int][2]float64{
-			WTHLow:      [2]float64{math.Inf(-1), 0.71},
-			WTHModerate: [2]float64{0.71, 0.78},
-			WTHHigh:     [2]float64{0.78, 0.82},
-			WTHVeryHigh: [2]float64{0.82, math.Inf(+1)},
+	Female: {
+		{20, 30}: {
+			WTHLow:      {math.Inf(-1), 0.71},
+			WTHModerate: {0.71, 0.78},
+			WTHHigh:     {0.78, 0.82},
+			WTHVeryHigh: {0.82, math.Inf(+1)},
 		},
-		[2]float64{30, 40}: map[int][2]float64{
-			WTHLow:      [2]float64{math.Inf(-1), 0.72},
-			WTHModerate: [2]float64{0.72, 0.79},
-			WTHHigh:     [2]float64{0.79, 0.84},
-			WTHVeryHigh: [2]float64{0.84, math.Inf(+1)},
+		{30, 40}: {
+			WTHLow:      {math.Inf(-1), 0.72},
+			WTHModerate: {0.72, 0.79},
+			WTHHigh:     {0.79, 0.84},
+			WTHVeryHigh: {0.84, math.Inf(+1)},
 		},
-		[2]float64{40, 50}: map[int][2]float64{
-			WTHLow:      [2]float64{math.Inf(-1), 0.73},
-			WTHModerate: [2]float64{0.73, 0.80},
-			WTHHigh:     [2]float64{0.80, 0.87},
-			WTHVeryHigh: [2]float64{0.87, math.Inf(+1)},
+		{40, 50}: {
+			WTHLow:      {math.Inf(-1), 0.73},
+			WTHModerate: {0.73, 0.80},
+			WTHHigh:     {0.80, 0.87},
+			WTHVeryHigh: {0.87, math.Inf(+1)},
 		},
-		[2]float64{50, 60}: map[int][2]float64{
-			WTHLow:      [2]float64{math.Inf(-1), 0.74},
-			WTHModerate: [2]float64{0.74, 0.82},
-			WTHHigh:     [2]float64{0.82, 0.88},
-			WTHVeryHigh: [2]float64{0.88, math.Inf(+1)},
+		{50, 60}: {
+			WTHLow:      {math.Inf(-1), 0.74},
+			WTHModerate: {0.74, 0.82},
+			WTHHigh:     {0.82, 0.88},
+			WTHVeryHigh: {0.88, math.Inf(+1)},
 		},
-		[2]float64{60, 70}: map[int][2]float64{
-			WTHLow:      [2]float64{math.Inf(-1), 0.76},
-			WTHModerate: [2]float64{0.76, 0.84},
-			WTHHigh:     [2]float64{0.84, 0.90},
-			WTHVeryHigh: [2]float64{0.90, math.Inf(+1)},
+		{60, 70}: {
+			WTHLow:      {math.Inf(-1), 0.76},
+			WTHModerate: {0.76, 0.84},
+			WTHHigh:     {0.84, 0.90},
+			WTHVeryHigh: {0.90, math.Inf(+1)},
 		},
 	},
 }
