@@ -7,7 +7,6 @@
 [![License](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/joaodubas/phass/blob/master/LICENSE)
 [![GoDoc](https://godoc.org/github.com/joaodubas/phass?status.svg)](https://godoc.org/github.com/joaodubas/phass)
 
-
 After working for many years in physical education, specially with physical
 assessment and physiology, I grew missing a specialized library to aid during
 development of custom solutions.
