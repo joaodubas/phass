@@ -7,12 +7,12 @@ import (
 func TestWaistToHipCalcAndClassification(t *testing.T) {
 	male, err := NewPerson("João Paulo Dubas", "1978-Dec-15", Male)
 	if err != nil {
-		t.Errorf("Could not create a person: .", err)
+		t.Errorf("Could not create a person: %s.", err)
 	}
 
 	female, err := NewPerson("Ana Paula Dubas", "1988-Mar-08", Female)
 	if err != nil {
-		t.Errorf("Could not create a person: .", err)
+		t.Errorf("Could not create a person: %s.", err)
 	}
 
 	type wthSpec struct {
