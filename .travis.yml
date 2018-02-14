@@ -5,7 +5,7 @@
 
 env:
   global:
-    - CC_TEST_REPORT_ID=a5dbf18fd6c79de03bf342fb5aaf79be9f5c682baa1871c00362652b1ab17e19
+    - CC_TEST_REPORTER_ID=a5dbf18fd6c79de03bf342fb5aaf79be9f5c682baa1871c00362652b1ab17e19
 language: go
 go:
   - 1.9
