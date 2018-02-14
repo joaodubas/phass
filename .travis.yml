@@ -39,7 +39,8 @@ script:
   - goveralls -coverprofile=coverage.txt -service=travis-ci
 after_script:
   # Upload coverage report to codeclimate
-  - ./cc-test-reporter after-build -t go test -coverprofile=coverage.txt --exit-code $TRAVIS_TEST_RESULT
+  - cp coverage.txt c.out
+  - ./cc-test-reporter after-build -t gocov --exit-code $TRAVIS_TEST_RESULT
 after_success:
   # Upload coverage to codecov.io
   - bash <(curl -s https://codecov.io/bash)
