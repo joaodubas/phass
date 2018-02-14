@@ -5,7 +5,7 @@
 
 env:
   global:
-    - CC_TEST_REPORT_ID=a5dbf18fd6c79de03bf342fb5aaf79be9f5c682baa1871c00362652b1ab17e19
+    - CC_TEST_REPORTER_ID=a5dbf18fd6c79de03bf342fb5aaf79be9f5c682baa1871c00362652b1ab17e19
 language: go
 go:
   - 1.9
@@ -39,7 +39,8 @@ script:
   - goveralls -coverprofile=coverage.txt -service=travis-ci
 after_script:
   # Upload coverage report to codeclimate
-  - ./cc-test-reporter after-build -t go test -coverprofile=coverage.txt --exit-code $TRAVIS_TEST_RESULT
+  - cp coverage.txt c.out
+  - ./cc-test-reporter after-build -t gocov --exit-code $TRAVIS_TEST_RESULT
 after_success:
   # Upload coverage to codecov.io
   - bash <(curl -s https://codecov.io/bash)
