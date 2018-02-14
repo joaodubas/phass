@@ -30,6 +30,6 @@ script:
   # Run all tests
   - go test -v -covermode=count -coverprofile=coverage.txt ./...
   - goveralls -coverprofile=coverage.txt -service=travis-ci
-after_sucess:
+after_success:
   # Upload coverage to codecov.io
   - bash <(curl -s https://codecov.io/bash)
