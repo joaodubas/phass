@@ -103,39 +103,54 @@ type Equationer interface {
 // the one expected.
 func ValidateGender(expect int) Validator {
 	return func(e *Equation) (bool, error) {
-		if g, ok := e.In("gender"); !ok {
-			return false, fmt.Errorf("Missing gender")
-		} else if int(g) != expect {
-			return false, fmt.Errorf("Valid for gender %d", expect)
-		}
-		return true, nil
+		return validateGender(expect, e)
 	}
+}
+
+// validateGender ensure that gender is set and matches the expected value.
+func validateGender(expect int, e *Equation) (bool, error) {
+	if g, ok := e.In("gender"); !ok {
+		return false, fmt.Errorf("Missing gender")
+	} else if int(g) != expect {
+		return false, fmt.Errorf("Valid for gender %d", expect)
+	}
+	return true, nil
 }
 
 // ValidateAge returns a Validator function, that ensure a given age is
 // between lower and upper limits.
 func ValidateAge(lower, upper float64) Validator {
 	return func(e *Equation) (bool, error) {
-		if age, ok := e.In("age"); !ok {
-			return false, fmt.Errorf("Missing age measure")
-		} else if age < lower || age > upper {
-			return false, fmt.Errorf("Valid for ages between %.0f and %.0f", lower, upper)
-		}
-		return true, nil
+		return validateAge(lower, upper, e)
 	}
+}
+
+// validateAge ensure that age is set and is between limits.
+func validateAge(lower, upper float64, e *Equation) (bool, error) {
+	if age, ok := e.In("age"); !ok {
+		return false, fmt.Errorf("Missing age measure")
+	} else if age < lower || age > upper {
+		return false, fmt.Errorf("Valid for ages between %.0f and %.0f", lower, upper)
+	}
+	return true, nil
 }
 
 // ValidateMeasures returns a Validator function, that ensure a list of
 // expected measures are available.
 func ValidateMeasures(expect []string) Validator {
 	return func(e *Equation) (bool, error) {
-		for _, k := range expect {
-			if _, ok := e.In(k); !ok {
-				return false, fmt.Errorf("Missing %s measure", k)
-			}
-		}
-		return true, nil
+		return validateMeasures(expect, e)
 	}
+}
+
+// validateMeasures ensure that a list of measures are available.
+func validateMeasures(expect []string, e *Equation) (bool, error) {
+	for _, k := range expect {
+		if _, ok := e.In(k); !ok {
+			return false, fmt.Errorf("Missing %s measure", k)
+		}
+	}
+	return true, nil
 }
 
 /**
