@@ -89,7 +89,7 @@ func (a *Anthropometry) Result() ([]string, error) {
  */
 
 // AnthropometricRatio represents a given anthropometric ratio. It's main
-// responsability is to implement Measurer interface for any ratio.
+// responsibility is to implement Measurer interface for any ratio.
 type AnthropometricRatio struct {
 	*Anthropometry
 	// lim represents the limits for a given classification value

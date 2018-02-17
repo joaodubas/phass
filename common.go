@@ -157,7 +157,7 @@ func validateMeasures(expect []string, e *Equation) (bool, error) {
  * Classification
  */
 
-// Classifier is used to classifiy a given value, with base in classes and a
+// Classifier is used to classify a given value, with base in classes and a
 // string mapper.
 // classes is used to verify in which classification bin this value is
 // contained, and mapper is used to convert the classification bin to a string.
