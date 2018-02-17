@@ -10,34 +10,34 @@ import (
  */
 
 // Circuferences constants.
-// CCFNeck: neck circumference
-// CCFShoulder: sholder circumference
-// CCFChest: chest circumference
-// CCFWaist: wait circumference
-// CCFAbdominal: abdominal circumference
-// CCFHip: hip circumference
-// CCFRightArm: right arm circumference
-// CCFRightForeArm: right forearm circumference
-// CCFRightThigh: right thigh circumference
-// CCFRightCalf: right calf circumference
-// CCFLeftArm: left arm circumference
-// CCFLeftForeArm: left forearm circumference
-// CCFLeftThigh: left thigh circumference
-// CCFLeftCalf: left calf circumference
 const (
+	// CCFNeck: neck circumference
 	CCFNeck int = iota
+	// CCFShoulder: sholder circumference
 	CCFShoulder
+	// CCFChest: chest circumference
 	CCFChest
+	// CCFWaist: wait circumference
 	CCFWaist
+	// CCFAbdominal: abdominal circumference
 	CCFAbdominal
+	// CCFHip: hip circumference
 	CCFHip
+	// CCFRightArm: right arm circumference
 	CCFRightArm
+	// CCFRightForeArm: right forearm circumference
 	CCFRightForeArm
+	// CCFRightThigh: right thigh circumference
 	CCFRightThigh
+	// CCFRightCalf: right calf circumference
 	CCFRightCalf
+	// CCFLeftArm: left arm circumference
 	CCFLeftArm
+	// CCFLeftForeArm: left forearm circumference
 	CCFLeftForeArm
+	// CCFLeftThigh: left thigh circumference
 	CCFLeftThigh
+	// CCFLeftCalf: left calf circumference
 	CCFLeftCalf
 )
 
@@ -153,20 +153,12 @@ func (w *WaistToHip) Classify() (string, error) {
 		return "", err
 	}
 
-	genderClass, ok := wthLimits[w.Person.Gender]
-	if !ok {
-		return "", fmt.Errorf("No classification for gender %d", w.Person.Gender)
+	classes, err := wthLimitsForGenderAndAge(w.Person.Gender, w.Person.AgeFromDate(w.Assessment.Date))
+	if err != nil {
+		return "", err
 	}
 
-	age := w.Person.AgeFromDate(w.Assessment.Date)
-	for limits, classes := range genderClass {
-		if age < limits[0] || age >= limits[1] {
-			continue
-		}
-		return Classifier(v, classes, WTHClassification), nil
-	}
-
-	return "", fmt.Errorf("No classification for age %.0f", age)
+	return Classifier(v, classes, WTHClassification), nil
 }
 
 // Calc returns value for this waist-to-hip assessment.
@@ -282,6 +274,25 @@ var (
 /**
  * Classification
  */
+
+// wthLimitsForGenderAndAge return waist-to-hip classification map for a given
+// gender and age. In case neither gender nor age match any map, an error is
+// returned.
+func wthLimitsForGenderAndAge(gender int, age float64) (map[int][2]float64, error) {
+	genderClass, ok := wthLimits[gender]
+	if !ok {
+		return nil, fmt.Errorf("No classification for gender %d", gender)
+	}
+
+	for limits, classes := range genderClass {
+		if age < limits[0] || age >= limits[1] {
+			continue
+		}
+		return classes, nil
+	}
+
+	return nil, fmt.Errorf("No classification for age %.0f", age)
+}
 
 // Waist-to-hip classification constants.
 const (

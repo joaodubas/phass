@@ -3,9 +3,10 @@
 # 1. https://github.com/sudo-suhas/symcrypto/blob/master/.travis.yml
 # 2. https://gist.github.com/y0ssar1an/df2dab474520c4086926f672c52db139
 
-env:
-  global:
-    - CC_TEST_REPORTER_ID=a5dbf18fd6c79de03bf342fb5aaf79be9f5c682baa1871c00362652b1ab17e19
+dist: trusty
+addons:
+  sonarcloud:
+    organization: joaodubas-github
 language: go
 go:
   - 1.9
@@ -37,6 +38,8 @@ script:
   # Run all tests
   - go test -v -covermode=count -coverprofile=coverage.txt ./...
   - goveralls -coverprofile=coverage.txt -service=travis-ci
+  # Scan project to sonarcloud
+  - sonar-scanner
 after_script:
   # Upload coverage report to codeclimate
   - cp coverage.txt c.out
