@@ -153,20 +153,12 @@ func (w *WaistToHip) Classify() (string, error) {
 		return "", err
 	}
 
-	genderClass, ok := wthLimits[w.Person.Gender]
-	if !ok {
-		return "", fmt.Errorf("No classification for gender %d", w.Person.Gender)
+	classes, err := wthLimitsForGenderAndAge(w.Person.Gender, w.Person.AgeFromDate(w.Assessment.Date))
+	if err != nil {
+		return "", err
 	}
 
-	age := w.Person.AgeFromDate(w.Assessment.Date)
-	for limits, classes := range genderClass {
-		if age < limits[0] || age >= limits[1] {
-			continue
-		}
-		return Classifier(v, classes, WTHClassification), nil
-	}
-
-	return "", fmt.Errorf("No classification for age %.0f", age)
+	return Classifier(v, classes, WTHClassification), nil
 }
 
 // Calc returns value for this waist-to-hip assessment.
@@ -282,6 +274,25 @@ var (
 /**
  * Classification
  */
+
+// wthLimitsForGenderAndAge return waist-to-hip classification map for a given
+// gender and age. In case neither gender nor age match any map, an error is
+// returned.
+func wthLimitsForGenderAndAge(gender int, age float64) (map[int][2]float64, error) {
+	genderClass, ok := wthLimits[gender]
+	if !ok {
+		return nil, fmt.Errorf("No classification for gender %d", gender)
+	}
+
+	for limits, classes := range genderClass {
+		if age < limits[0] || age >= limits[1] {
+			continue
+		}
+		return classes, nil
+	}
+
+	return nil, fmt.Errorf("No classification for age %.0f", age)
+}
 
 // Waist-to-hip classification constants.
 const (
