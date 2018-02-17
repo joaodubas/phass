@@ -10,34 +10,34 @@ import (
  */
 
 // Circuferences constants.
-// CCFNeck: neck circumference
-// CCFShoulder: sholder circumference
-// CCFChest: chest circumference
-// CCFWaist: wait circumference
-// CCFAbdominal: abdominal circumference
-// CCFHip: hip circumference
-// CCFRightArm: right arm circumference
-// CCFRightForeArm: right forearm circumference
-// CCFRightThigh: right thigh circumference
-// CCFRightCalf: right calf circumference
-// CCFLeftArm: left arm circumference
-// CCFLeftForeArm: left forearm circumference
-// CCFLeftThigh: left thigh circumference
-// CCFLeftCalf: left calf circumference
 const (
+	// CCFNeck: neck circumference
 	CCFNeck int = iota
+	// CCFShoulder: sholder circumference
 	CCFShoulder
+	// CCFChest: chest circumference
 	CCFChest
+	// CCFWaist: wait circumference
 	CCFWaist
+	// CCFAbdominal: abdominal circumference
 	CCFAbdominal
+	// CCFHip: hip circumference
 	CCFHip
+	// CCFRightArm: right arm circumference
 	CCFRightArm
+	// CCFRightForeArm: right forearm circumference
 	CCFRightForeArm
+	// CCFRightThigh: right thigh circumference
 	CCFRightThigh
+	// CCFRightCalf: right calf circumference
 	CCFRightCalf
+	// CCFLeftArm: left arm circumference
 	CCFLeftArm
+	// CCFLeftForeArm: left forearm circumference
 	CCFLeftForeArm
+	// CCFLeftThigh: left thigh circumference
 	CCFLeftThigh
+	// CCFLeftCalf: left calf circumference
 	CCFLeftCalf
 )
 

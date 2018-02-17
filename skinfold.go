@@ -7,24 +7,24 @@ import "fmt"
  */
 
 // Skinfold constants.
-// SKFSubscapular: subscapular skinfold.
-// SKFTriceps: triceps skinfold.
-// SKFBiceps: biceps skinfold.
-// SKFChest: chest skinfold.
-// SKFMidaxillary: mid-axillary skinfold.
-// SKFSuprailiac: suprailiac skinfold.
-// SKFAbdominal: abdominal skinfold.
-// SKFThigh: thigh skinfold.
-// SKFCalf: calf skinfold.
 const (
+	// SKFSubscapular: subscapular skinfold.
 	SKFSubscapular = iota
+	// SKFTriceps: triceps skinfold.
 	SKFTriceps
+	// SKFBiceps: biceps skinfold.
 	SKFBiceps
+	// SKFChest: chest skinfold.
 	SKFChest
+	// SKFMidaxillary: mid-axillary skinfold.
 	SKFMidaxillary
+	// SKFSuprailiac: suprailiac skinfold.
 	SKFSuprailiac
+	// SKFAbdominal: abdominal skinfold.
 	SKFAbdominal
+	// SKFThigh: thigh skinfold.
 	SKFThigh
+	// SKFCalf: calf skinfold.
 	SKFCalf
 )
 
