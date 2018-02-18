@@ -2,7 +2,6 @@ package phass
 
 import (
 	"math"
-	"strings"
 	"testing"
 )
 
@@ -34,7 +33,7 @@ func TestBodyFatCompositionValidation(t *testing.T) {
 			map[int]float64{SKFTriceps: 10.5, SKFSuprailiac: 26.9, SKFThigh: 21.2},
 			"Too young",
 			0.0,
-			"Valid for age",
+			ErrInvalidAge.Error(),
 		),
 		newCaseBodyFat(
 			female,
@@ -42,7 +41,7 @@ func TestBodyFatCompositionValidation(t *testing.T) {
 			map[int]float64{SKFTriceps: 10.5, SKFSuprailiac: 26.9, SKFThigh: 21.2},
 			"Too old",
 			0.0,
-			"Valid for age",
+			ErrInvalidAge.Error(),
 		),
 		newCaseBodyFat(
 			male,
@@ -50,7 +49,7 @@ func TestBodyFatCompositionValidation(t *testing.T) {
 			map[int]float64{SKFTriceps: 10.5, SKFSuprailiac: 26.9, SKFThigh: 21.2},
 			"Wrong gender",
 			0.0,
-			"Valid for gender",
+			ErrInvalidGender.Error(),
 		),
 		newCaseBodyFat(
 			female,
@@ -58,7 +57,7 @@ func TestBodyFatCompositionValidation(t *testing.T) {
 			map[int]float64{SKFTriceps: 10.5},
 			"Without skinfolds",
 			0.0,
-			"Missing skinfold",
+			"Missing skinfold suprailiac",
 		),
 		newCaseBodyFat(
 			female,
@@ -74,7 +73,7 @@ func TestBodyFatCompositionValidation(t *testing.T) {
 		bc := newEquation(data.person, data.assessment, data.skinfold)
 		if calc, err := bc.Calc(); data.err != "" && err == nil {
 			t.Errorf("Case _%s_ failed, should show a validation error", data.name)
-		} else if data.err != "" && !strings.Contains(err.Error(), data.err) {
+		} else if data.err != "" && err.Error() != data.err {
 			t.Errorf("Case _%s_ failed, should show proper error message", data.name)
 		} else if data.calc > 0.0 && !floatEqual(calc, data.calc, 0.009) {
 			t.Errorf("Case _%s_ failed, should have value %.4f, instead got %.4f", data.name, data.calc, calc)

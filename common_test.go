@@ -1,102 +1,114 @@
 package phass
 
 import (
-	"fmt"
 	"math"
-	"strings"
 	"testing"
 )
 
 func TestEquationValidation(t *testing.T) {
-	cases := []caseCommon{
-		{in: map[string]float64{}, ok: false, err: "Missing measure"},
-		{in: map[string]float64{"age": 18.0}, ok: false, err: "Missing measure"},
-		{in: map[string]float64{"sskf": 112.1}, ok: false, err: "Missing measure"},
-		{in: map[string]float64{"age": 17.9, "sskf": 112.1}, ok: false, err: "Equation valid for age"},
+	cases := []struct {
+		in  InParams
+		ok  bool
+		err error
+	}{
+		{
+			in:  map[string]float64{},
+			ok:  false,
+			err: ErrMissingMeasure,
+		},
+		{
+			in:  map[string]float64{"age": 18.0},
+			ok:  false,
+			err: ErrMissingMeasure,
+		},
+		{
+			in:  map[string]float64{"sskf": 112.1},
+			ok:  false,
+			err: ErrMissingMeasure,
+		},
+		{
+			in:  map[string]float64{"age": 17.9, "sskf": 112.1},
+			ok:  false,
+			err: ErrInvalidAge,
+		},
+		{
+			in:  map[string]float64{"age": 20, "sskf": 109.2},
+			ok:  true,
+			err: nil,
+		},
 	}
-
 	for _, data := range cases {
 		eq := NewEquation(data.in, conf)
 		if v, err := eq.Validate(); v != data.ok {
-			t.Error("Should get an error.")
-		} else if !strings.Contains(err.Error(), data.err) {
-			t.Error("Should get proper error message.")
+			t.Error("Should get an error")
+		} else if err != data.err {
+			t.Error("Should get proper error message")
 		}
 
-		if v, err := eq.Calc(); v > 0.0 {
-			t.Error("Value should be 0")
-		} else if !strings.Contains(err.Error(), data.err) {
-			t.Error("Should get proper error message.")
+		// NOTE: this checks if calc returns 0 when an error occurs.
+		if !data.ok {
+			if v, err := eq.Calc(); v > 0.0 {
+				t.Error("Value should be 0")
+			} else if err != data.err {
+				t.Error("Should get proper error message.")
+			}
 		}
 	}
-
-	eq := NewEquation(map[string]float64{"age": 20, "sskf": 109.2}, conf)
-	if v, err := eq.Validate(); !v {
-		t.Errorf("Should be valid, instead get: %s", err)
-	}
-	if v, err := eq.Calc(); v <= 0.0 && err != nil {
-		t.Errorf("Should get value greater that 0, instead get error %s", err)
-	}
-
 }
 
-func TestEquationRetrieveIn(t *testing.T) {
+func TestEquationRetrieveInputParameters(t *testing.T) {
 	in := map[string]float64{
 		"age":  18.8,
 		"sskf": 210.1,
 	}
 	eq := NewEquation(in, conf)
-
 	for k, v := range in {
-		sv, ok := eq.In(k)
-		if !ok {
-			t.Errorf("Key %s should be defined.", k)
-		}
-		if v != sv {
-			t.Errorf("Key %s should have value %.2f.", k, v)
+		if sv, ok := eq.In(k); !ok {
+			t.Errorf("Key %s should be defined", k)
+		} else if v != sv {
+			t.Errorf("Key %s should have value %.2f", k, v)
 		}
 	}
-
-	_, ok := eq.In("iDoNotExist")
-	if ok {
+	if _, ok := eq.In("iDoNotExist"); ok {
 		t.Error("Key should no be available")
 	}
 }
 
 func TestAgeValidator(t *testing.T) {
-	cases := []caseCommon{
+	cases := []struct {
+		in  InParams
+		ok  bool
+		err error
+	}{
 		{
 			in:  map[string]float64{},
 			ok:  false,
-			err: "Missing age",
+			err: ErrMissingAge,
 		},
 		{
 			in:  map[string]float64{"age": 9},
 			ok:  false,
-			err: "Valid for ages",
+			err: ErrInvalidAge,
 		},
 		{
 			in:  map[string]float64{"age": 21},
 			ok:  false,
-			err: "Valid for ages",
+			err: ErrInvalidAge,
+		},
+		{
+			in:  map[string]float64{"age": 15},
+			ok:  true,
+			err: nil,
 		},
 	}
-
 	validator := ValidateAge(10, 20)
 	for _, data := range cases {
 		eq := NewEquation(data.in, conf).(*Equation)
 		if ok, err := validator(eq); ok != data.ok {
 			t.Error("Should receive a proper boolean")
-		} else if !strings.Contains(err.Error(), data.err) {
+		} else if err != data.err {
 			t.Error("Should show proper error message")
 		}
-	}
-
-	eq := NewEquation(map[string]float64{"age": 15}, conf).(*Equation)
-	if ok, err := validator(eq); !ok {
-		t.Error("Should receive proper boolean")
-	} else if err != nil {
-		t.Error("Should not get an error")
 	}
 }
 
@@ -125,29 +137,32 @@ var conf = NewEquationConf(
 		return map[string]float64{}
 	},
 	[]Validator{
+		// ensure age and sskf measures are set
 		func(e *Equation) (bool, error) {
 			keys := []string{"age", "sskf"}
 			for _, k := range keys {
 				if _, ok := e.In(k); !ok {
-					return false, fmt.Errorf("Missing measure %s", k)
+					return false, ErrMissingMeasure
 				}
 			}
 			return true, nil
 		},
+		// ensure age is between 18 and 64 years
 		func(e *Equation) (bool, error) {
 			v, ok := e.In("age")
 			if !ok {
-				return false, fmt.Errorf("Missing measure age")
+				return false, ErrMissingAge
 			}
 
 			lower, upper := 18.0, 64.0
 			if v < lower || v >= upper {
-				return false, fmt.Errorf("Equation valid for age %.0f up to %.0f", lower, upper)
+				return false, ErrInvalidAge
 			}
 
 			return true, nil
 		},
 	},
+	// equation that calculates body density and convert into body fat.
 	func(e *Equation) float64 {
 		age, _ := e.In("age")
 		sskf, _ := e.In("sskf")
