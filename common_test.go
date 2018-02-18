@@ -74,6 +74,39 @@ func TestEquationRetrieveInputParameters(t *testing.T) {
 	}
 }
 
+func TestGenderValidator(t *testing.T) {
+	cases := []struct {
+		in  InParams
+		ok  bool
+		err error
+	}{
+		{
+			in:  map[string]float64{},
+			ok:  false,
+			err: ErrMissingGender,
+		},
+		{
+			in:  map[string]float64{"gender": float64(Male)},
+			ok:  false,
+			err: ErrInvalidGender,
+		},
+		{
+			in:  map[string]float64{"gender": float64(Female)},
+			ok:  true,
+			err: nil,
+		},
+	}
+	validator := ValidateGender(Female)
+	for _, data := range cases {
+		eq := NewEquation(data.in, conf).(*Equation)
+		if ok, err := validator(eq); ok != data.ok {
+			t.Error("Should receive a proper boolean")
+		} else if err != data.err {
+			t.Error("Should show proper error message")
+		}
+	}
+}
+
 func TestAgeValidator(t *testing.T) {
 	cases := []struct {
 		in  InParams
@@ -113,22 +146,51 @@ func TestAgeValidator(t *testing.T) {
 }
 
 func TestMeasureValidator(t *testing.T) {
-	cases := []caseCommon{}
+	cases := []struct {
+		in  InParams
+		ok  bool
+		err error
+	}{
+		{
+			in:  map[string]float64{},
+			ok:  false,
+			err: ErrMissingMeasure,
+		},
+		{
+			in:  map[string]float64{"age": 10},
+			ok:  false,
+			err: ErrMissingMeasure,
+		},
+		{
+			in:  map[string]float64{"age": 10, "weight": 68},
+			ok:  false,
+			err: ErrMissingMeasure,
+		},
+		{
+			in:  map[string]float64{"age": 10, "height": 168},
+			ok:  false,
+			err: ErrMissingMeasure,
+		},
+		{
+			in:  map[string]float64{"weight": 68, "height": 168},
+			ok:  false,
+			err: ErrMissingMeasure,
+		},
+		{
+			in:  map[string]float64{"age": 10, "weight": 68, "height": 168},
+			ok:  true,
+			err: nil,
+		},
+	}
 	validator := ValidateMeasures([]string{"age", "weight", "height"})
 	for _, data := range cases {
 		eq := NewEquation(data.in, conf).(*Equation)
 		if ok, err := validator(eq); ok != data.ok {
 			t.Error("Should receive proper boolean")
-		} else if strings.Contains(err.Error(), data.err) {
+		} else if err != data.err {
 			t.Error("Should show proper error message.")
 		}
 	}
-}
-
-type caseCommon struct {
-	in  InParams
-	ok  bool
-	err string
 }
 
 var conf = NewEquationConf(
