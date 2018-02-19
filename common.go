@@ -1,6 +1,8 @@
 package phass
 
-import "fmt"
+import (
+	"errors"
+)
 
 /**
  * Equation
@@ -99,6 +101,15 @@ type Equationer interface {
  * Validation
  */
 
+// Validation error messages.
+var (
+	ErrMissingGender  = errors.New("Missing gender")
+	ErrInvalidGender  = errors.New("Invalid gender")
+	ErrMissingAge     = errors.New("Missing age")
+	ErrInvalidAge     = errors.New("Invalid age")
+	ErrMissingMeasure = errors.New("Missing measure")
+)
+
 // ValidateGender returns a Validator function, that ensure gender is equal to
 // the one expected.
 func ValidateGender(expect int) Validator {
@@ -110,9 +121,9 @@ func ValidateGender(expect int) Validator {
 // validateGender ensure that gender is set and matches the expected value.
 func validateGender(expect int, e *Equation) (bool, error) {
 	if g, ok := e.In("gender"); !ok {
-		return false, fmt.Errorf("Missing gender")
+		return false, ErrMissingGender
 	} else if int(g) != expect {
-		return false, fmt.Errorf("Valid for gender %d", expect)
+		return false, ErrInvalidGender
 	}
 	return true, nil
 }
@@ -128,9 +139,9 @@ func ValidateAge(lower, upper float64) Validator {
 // validateAge ensure that age is set and is between limits.
 func validateAge(lower, upper float64, e *Equation) (bool, error) {
 	if age, ok := e.In("age"); !ok {
-		return false, fmt.Errorf("Missing age measure")
+		return false, ErrMissingAge
 	} else if age < lower || age > upper {
-		return false, fmt.Errorf("Valid for ages between %.0f and %.0f", lower, upper)
+		return false, ErrInvalidAge
 	}
 	return true, nil
 }
@@ -147,7 +158,7 @@ func ValidateMeasures(expect []string) Validator {
 func validateMeasures(expect []string, e *Equation) (bool, error) {
 	for _, k := range expect {
 		if _, ok := e.In(k); !ok {
-			return false, fmt.Errorf("Missing %s measure", k)
+			return false, ErrMissingMeasure
 		}
 	}
 	return true, nil

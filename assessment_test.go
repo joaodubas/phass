@@ -1,10 +1,72 @@
 package phass
 
 import (
+	"fmt"
 	"math"
+	"strings"
 	"testing"
 	"time"
 )
+
+func TestPersonMeasurerInterface(t *testing.T) {
+	cases := []struct {
+		name   string
+		dob    string
+		gender int
+		err    error
+	}{
+		{
+			name:   "Person 1",
+			dob:    "1978-Dec-15",
+			gender: Male,
+			err:    nil,
+		},
+		{
+			name:   "Person 2",
+			dob:    "1988-Mar-08",
+			gender: Female,
+			err:    nil,
+		},
+	}
+
+	for _, data := range cases {
+		p, err := NewPerson(data.name, data.dob, data.gender)
+		if err != data.err {
+			t.Error("This is a valid person")
+		}
+
+		if p.GetName() != "Person" {
+			t.Error("Wrong measurement name")
+		}
+
+		rs, err := p.Result()
+		if err != nil {
+			t.Error("This is a valid result")
+		} else if len(rs) != 4 {
+			t.Error("There should be 4 information about person")
+		}
+		for index, item := range rs {
+			switch index {
+			case 0:
+				if !strings.Contains(item, p.FullName) {
+					t.Error("Full name should be present")
+				}
+			case 1:
+				if !strings.Contains(item, p.genderRepr()) {
+					t.Error("Gender representation should be present")
+				}
+			case 2:
+				if !strings.Contains(item, fmt.Sprintf("%.0f", p.Age())) {
+					t.Error("Age in years should be present")
+				}
+			case 3:
+				if !strings.Contains(item, fmt.Sprintf("%.1f", p.AgeInMonths())) {
+					t.Error("Age in months should be present")
+				}
+			}
+		}
+	}
+}
 
 func TestPersonBirth(t *testing.T) {
 	_, err := NewPerson("Someone", "1900-Dec-40", Male)
