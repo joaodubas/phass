@@ -18,7 +18,7 @@ before_script:
   # Setup env vars to make lint/tests easier
   - GO_FILES=$(find . -iname '*.go' | grep -v /vendor/)  # All the .go files, excluding vendor/
   # Install linters
-  - go get -u github.com/golang/lint/golint
+  - go get -u golang.org/x/lint/golint
   - go get -u honnef.co/go/tools/cmd/megacheck
   - go get -u github.com/fzipp/gocyclo
   - go get -u github.com/kisielk/errcheck
